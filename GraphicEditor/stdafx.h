@@ -18,6 +18,9 @@
 
 #include <afxwin.h>         // MFC 핵심 및 표준 구성 요소입니다.
 #include <afxext.h>         // MFC 확장입니다.
+#include<GdiPlus.h>
+#pragma comment(lib, "gdiplus")
+using namespace Gdiplus;
 
 
 
@@ -31,6 +34,7 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <afxcontrolbars.h>     // MFC의 리본 및 컨트롤 막대 지원
+#include <afx.h>
 
 
 
