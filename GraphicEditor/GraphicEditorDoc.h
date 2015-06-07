@@ -4,6 +4,8 @@
 
 
 #pragma once
+#include "Object.h"
+#include "GEllipse.h"
 
 
 class CGraphicEditorDoc : public CDocument
@@ -17,6 +19,8 @@ public:
 
 // 작업입니다.
 public:
+	GraphicObjectType m_CurrentType;	//현재 그리기 타입
+
 
 // 재정의입니다.
 public:

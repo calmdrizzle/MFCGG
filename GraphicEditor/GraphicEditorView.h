@@ -14,6 +14,13 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	CGraphicEditorDoc* GetDocument() const;
+	int m_drawMode;
+	BOOL m_selected;
+	COLORREF m_FillColor;
+	COLORREF m_FigureLineColor;
+	int m_FigureThickness;
+	int m_LineThickness;
+	int m_LinepatternIndex;
 
 // 작업입니다.
 public:
@@ -40,6 +47,10 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnUpdateEllipse(CCmdUI *pCmdUI);
+	afx_msg void OnEllipse();
 };
 
 #ifndef _DEBUG  // GraphicEditorView.cpp의 디버그 버전

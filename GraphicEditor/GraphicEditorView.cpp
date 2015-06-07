@@ -26,6 +26,9 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_UPDATE_COMMAND_UI(ID_ELLIPSE, &CGraphicEditorView::OnUpdateEllipse)
+	ON_COMMAND(ID_ELLIPSE, &CGraphicEditorView::OnEllipse)
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -33,6 +36,8 @@ END_MESSAGE_MAP()
 CGraphicEditorView::CGraphicEditorView()
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
+	m_drawMode = 1;
+	m_selected = FALSE;
 
 }
 
@@ -100,5 +105,35 @@ CGraphicEditorDoc* CGraphicEditorView::GetDocument() const // 디버그되지 않은 버
 }
 #endif //_DEBUG
 
+void CGraphicEditorView::OnUpdateEllipse(CCmdUI *pCmdUI)
+{
+	BOOL bsEnable = GetDocument()->m_CurrentType == ELLIPSE;
+	pCmdUI->SetCheck(bsEnable);
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
 
 // CGraphicEditorView 메시지 처리기
+
+
+void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	CClientDC dc(this);
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	GEllipse* g = new GEllipse();
+
+
+	CView::OnLButtonDown(nFlags, point);
+}
+
+void CGraphicEditorView::OnEllipse()
+{
+	GetDocument()->m_CurrentType = ELLIPSE;
+	m_drawMode = 1;
+	m_selected = FALSE;
+	if (!m_selected){
+		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
+		//doc->m_sSelectedList.RemoveAll();
+	}
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
