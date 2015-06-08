@@ -76,6 +76,7 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnUpdatePolyline(CCmdUI *pCmdUI);
 	afx_msg void OnPolyline();
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // GraphicEditorView.cpp의 디버그 버전
