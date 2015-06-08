@@ -32,6 +32,8 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_COMMAND(ID_LINE, &CGraphicEditorView::OnLine)
 	ON_UPDATE_COMMAND_UI(ID_ELLIPSE, &CGraphicEditorView::OnUpdateEllipse)
 	ON_COMMAND(ID_ELLIPSE, &CGraphicEditorView::OnEllipse)
+	ON_UPDATE_COMMAND_UI(ID_RECTANGLE, &CGraphicEditorView::OnUpdateRectangle)
+	ON_COMMAND(ID_RECTANGLE, &CGraphicEditorView::OnRectangle)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
@@ -125,6 +127,12 @@ void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
 
+void CGraphicEditorView::OnUpdateRectangle(CCmdUI *pCmdUI)
+{
+	BOOL bsEnable = GetDocument()->m_CurrentType == RECTANGLE;
+	pCmdUI->SetCheck(bsEnable);
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
 
 // CGraphicEditorView 메시지 처리기
 
@@ -157,6 +165,9 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		//m_Draw = FALSE;
 		break;
 	
+	case ELLIPSE:
+		break;
+	
 	}
 	GEllipse* g = new GEllipse();
 
@@ -179,6 +190,18 @@ void CGraphicEditorView::OnLine()
 void CGraphicEditorView::OnEllipse()
 {
 	GetDocument()->m_CurrentType = ELLIPSE;
+	m_drawMode = 1;
+	m_selected = FALSE;
+	if (!m_selected){
+		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
+		//doc->m_sSelectedList.RemoveAll();
+	}
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+void CGraphicEditorView::OnRectangle()
+{
+	GetDocument()->m_CurrentType = RECTANGLE;
 	m_drawMode = 1;
 	m_selected = FALSE;
 	if (!m_selected){
