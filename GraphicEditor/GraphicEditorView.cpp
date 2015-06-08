@@ -7,6 +7,8 @@
 // 해당 프로젝트와 문서 코드를 공유하도록 해 줍니다.
 #ifndef SHARED_HANDLERS
 #include "GraphicEditor.h"
+#include "MainFrm.h" 
+#include "Object.h"
 #endif
 
 #include "GraphicEditorDoc.h"
@@ -26,9 +28,12 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_UPDATE_COMMAND_UI(ID_LINE, &CGraphicEditorView::OnUpdateLine)
+	ON_COMMAND(ID_LINE, &CGraphicEditorView::OnLine)
 	ON_UPDATE_COMMAND_UI(ID_ELLIPSE, &CGraphicEditorView::OnUpdateEllipse)
 	ON_COMMAND(ID_ELLIPSE, &CGraphicEditorView::OnEllipse)
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -112,6 +117,13 @@ void CGraphicEditorView::OnUpdateEllipse(CCmdUI *pCmdUI)
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
 
+void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
+{
+	BOOL bsEnable = GetDocument()->m_CurrentType == LINE;
+	pCmdUI->SetCheck(bsEnable);
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
 
 // CGraphicEditorView 메시지 처리기
 
@@ -120,10 +132,48 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CClientDC dc(this);
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	//SetCapture(); // 마우스 캡쳐
+	CMainFrame *ppMainFrame = (CMainFrame *)AfxGetMainWnd();
+	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
+	m_Draw = TRUE; //그리기 시작
+	//psDoc->m_sClickedPoint = point;
+	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
+
+	switch (psDoc->m_CurrType)
+	{
+	case SELECT:
+		break;
+
+	case LINE:
+		m_ptStart = point;
+		//psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
+		//속성에서 변경한 내용 가져와 지정
+		//psDoc->GetLine()->SetAlpha(CDrawPropertyValue::m_nsAlpha);
+		//psDoc->GetLine()->SetPenStyle(CDrawPropertyValue::m_nsPenStyle);
+		//psDoc->GetLine()->SetLineColor(CDrawPropertyValue::m_sLineColor);
+		//psDoc->GetLine()->SetThickness(CDrawPropertyValue::m_nsThickness);
+		//psDoc->GetLine()->SetStartCap(CDrawPropertyValue::m_nsStartCap);
+		//psDoc->GetLine()->SetEndCap(CDrawPropertyValue::m_nsEndCap);
+		//m_Draw = FALSE;
+		break;
+	
+	}
 	GEllipse* g = new GEllipse();
 
 
 	CView::OnLButtonDown(nFlags, point);
+}
+
+void CGraphicEditorView::OnLine()
+{
+	GetDocument()->m_CurrentType = LINE;
+	m_drawMode = 1;
+	m_selected = FALSE;
+	if (!m_selected){
+		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
+		//doc->m_sSelectedList.RemoveAll();
+	}
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
 
 void CGraphicEditorView::OnEllipse()
@@ -136,4 +186,14 @@ void CGraphicEditorView::OnEllipse()
 		//doc->m_sSelectedList.RemoveAll();
 	}
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CClientDC dc(this);
+	m_ptEnd = point;
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);
+	CView::OnLButtonUp(nFlags, point);
 }

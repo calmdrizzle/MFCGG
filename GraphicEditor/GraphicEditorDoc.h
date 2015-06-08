@@ -6,6 +6,7 @@
 #pragma once
 #include "Object.h"
 #include "GEllipse.h"
+#include "Line.h"
 
 
 class CGraphicEditorDoc : public CDocument
@@ -16,10 +17,14 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
+	Line* GetLine(BOOL bIsNew = FALSE);
 
 // 작업입니다.
 public:
 	GraphicObjectType m_CurrentType;	//현재 그리기 타입
+	CPoint m_ClickedPoint;				//현재 클릭한 포인트
+	Object* m_CurrObject;				//
+	GraphicObjectType m_CurrType;		//
 
 
 // 재정의입니다.

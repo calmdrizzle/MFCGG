@@ -135,3 +135,18 @@ void CGraphicEditorDoc::Dump(CDumpContext& dc) const
 
 
 // CGraphicEditorDoc 명령
+
+Line* CGraphicEditorDoc::GetLine(BOOL bIsNew)
+{
+	if (bIsNew == TRUE)
+	{
+		m_CurrObject = new Line(); //새로운 Line 객체 생성
+		//m_ObjectList.AddTail(m_sCurrObject); //리스트에 추가
+
+		return (Line*)m_CurrObject;
+	}
+	else if (m_CurrObject != NULL && m_CurrType == LINE) //현재 타입이 라인이고, NULL이 아닐 때
+		return (Line*)m_CurrObject;
+
+	return NULL; //잘못된 사용 시에는 NULL을 반환
+}

@@ -16,11 +16,16 @@ public:
 	CGraphicEditorDoc* GetDocument() const;
 	int m_drawMode;
 	BOOL m_selected;
+	CPoint m_ptEnd;				//끝나는 점
+	CPoint m_ptStart, m_ptPrev; //시작점과 움직일때 보여주는 점
 	COLORREF m_FillColor;
 	COLORREF m_FigureLineColor;
+	COLORREF m_color;		//선 색
 	int m_FigureThickness;
-	int m_LineThickness;
+	int m_LineThickness;	//선 두께
 	int m_LinepatternIndex;
+	int m_FlagNewLine;
+	BOOL m_Draw;	//그리기 모드인지 TRUE와 FALSE로 구분
 
 // 작업입니다.
 public:
@@ -50,7 +55,10 @@ protected:
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnUpdateEllipse(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateLine(CCmdUI *pCmdUI);
 	afx_msg void OnEllipse();
+	afx_msg void OnLine();
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // GraphicEditorView.cpp의 디버그 버전
