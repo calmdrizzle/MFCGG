@@ -7,9 +7,16 @@
 
 class CGraphicEditorView : public CView
 {
+	DECLARE_DYNCREATE(CGraphicEditorView)
+	//화면 깜빡임 방지
+private:
+	CDC* _memDc;
+	CBitmap *_bitmap, *_oldBitmap;
+	CRect _rect;
+	CPoint _anchor, _drawTo, _oldPoint;
 protected: // serialization에서만 만들어집니다.
 	CGraphicEditorView();
-	DECLARE_DYNCREATE(CGraphicEditorView)
+	
 
 // 특성입니다.
 public:
@@ -26,7 +33,7 @@ public:
 	int m_LinepatternIndex;
 	int m_FlagNewLine;
 	BOOL m_Draw;	//그리기 모드인지 TRUE와 FALSE로 구분
-	CPoint _anchor, _drawTo, _oldPoint;
+	
 
 // 작업입니다.
 public:

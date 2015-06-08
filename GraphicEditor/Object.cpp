@@ -10,6 +10,10 @@
 
 Object::Object()
 {
+	m_Thickness = 1;
+	m_LineColor = RGB(0, 0, 0);
+	//m_bsGrouped = FALSE;
+	//m_nsAlpha = 100;
 }
 
 Object::~Object()

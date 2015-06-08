@@ -150,3 +150,7 @@ Line* CGraphicEditorDoc::GetLine(BOOL bIsNew)
 
 	return NULL; //잘못된 사용 시에는 NULL을 반환
 }
+
+CPtrList& CGraphicEditorDoc::getDrawObjects() {
+	return m_DrawObjs;
+}

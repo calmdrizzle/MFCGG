@@ -11,6 +11,10 @@
 
 class CGraphicEditorDoc : public CDocument
 {
+private:
+	CPtrList m_DrawObjs;
+	Object* m_Cur;
+
 protected: // serialization에서만 만들어집니다.
 	CGraphicEditorDoc();
 	DECLARE_DYNCREATE(CGraphicEditorDoc)
@@ -18,6 +22,7 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	Line* GetLine(BOOL bIsNew = FALSE);
+	CPtrList& getDrawObjects();
 
 // 작업입니다.
 public:

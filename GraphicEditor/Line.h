@@ -20,6 +20,7 @@ public:
 	COLORREF m_color; //색
 	int m_Thickness; // 두께
 
+
 public:
 	void Draw(CDC* cdc);
 	int drawType(void);
@@ -28,7 +29,6 @@ public:
 
 	void setPoint(CPoint& start, CPoint& end);
 	void setLine(int& lineWidth, COLORREF& color);
-
 
 private:
 	int m_PenStyle;						// 펜 스타일
