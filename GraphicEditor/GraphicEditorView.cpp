@@ -64,7 +64,7 @@ BOOL CGraphicEditorView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CGraphicEditorView 그리기
 
-void CGraphicEditorView::OnDraw(CDC* /*pDC*/)
+void CGraphicEditorView::OnDraw(CDC* pDC)
 {
 	CGraphicEditorDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -76,6 +76,7 @@ void CGraphicEditorView::OnDraw(CDC* /*pDC*/)
 
 	TRACE("OnDraw Rect(%d, %d, %d, %d)\n", rec.top, rec.left, rec.bottom, rec.right);
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
+
 }
 
 
@@ -153,7 +154,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	m_Draw = TRUE; //그리기 시작
 
-	//m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
+	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 
 	switch (psDoc->m_CurrentType)
 	{
@@ -162,8 +163,8 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	case LINE:
 		psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
-		psDoc->GetLine(TRUE);
-		m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
+		//psDoc->GetLine(TRUE);
+		//m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 		//psDoc->GetLine()->setLine(ToolValues::LineWidth, ToolValues::FgColor);
 		break;
 
@@ -193,7 +194,6 @@ void CGraphicEditorView::OnLine()
 		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
 		//doc->m_sSelectedList.RemoveAll();
 	}
-	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
 
 void CGraphicEditorView::OnEllipse()
@@ -224,7 +224,7 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
-	m_ptEnd = point;
+	
 	
 	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
 	TRACE("OnButtonUp : %d\n", nFlags);
@@ -235,7 +235,8 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 		switch (psDoc->m_CurrentType)
 		{
 		case LINE:
-			psDoc->GetLine()->setPoint(_anchor, point);
+			//psDoc->GetLine()->setPoint(_anchor, point);
+			m_ptEnd = point;
 			dc.MoveTo(m_ptStart);
 			dc.LineTo(m_ptEnd);
 			break;
@@ -254,9 +255,6 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
 	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
 	//pMainFrame->m_wndStatusBar.SetPaneText(2, str);
-
-	if (m_Draw == TRUE)
-	{
 		CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
 		CClientDC dc(this);
 		//이동 시 delta x,y 구하기
@@ -264,7 +262,10 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			dy = point.y - psDoc->m_ClickedPoint.y;
 		psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
 		int oldMode;
-		int radius;
+	//int radius;
+
+	if (m_Draw == TRUE)
+	{
 
 		switch (psDoc->m_CurrentType)
 		{

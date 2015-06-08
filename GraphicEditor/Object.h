@@ -19,9 +19,6 @@ public:
 	virtual ~Object();
 	virtual void Serialize(CArchive& ar);
 	//virtual void deserialize(CArchive& ar);
-	static COLORREF FgColor;
-	static COLORREF BgColor;
-	static int LineWidth;
 
 public:
 	GraphicObjectType GetType(void) const { return m_Type; }	//그래피컬 개체의 타입을 반환
