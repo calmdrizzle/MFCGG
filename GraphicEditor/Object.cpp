@@ -21,7 +21,7 @@ void Object::Serialize(CArchive& ar)			//직렬화
 	CObject::Serialize(ar);
 	if (ar.IsStoring()) //저장
 	{
-		ar << (WORD)m_sType;
+		ar << (WORD)m_Type;
 		ar << m_StartPoint;
 		ar << m_EndPoint;
 		ar << m_LineColor;
@@ -32,7 +32,7 @@ void Object::Serialize(CArchive& ar)			//직렬화
 	else //로드
 	{
 		WORD wTemp;
-		ar >> wTemp; m_sType = (GraphicObjectType)wTemp;
+		ar >> wTemp; m_Type = (GraphicObjectType)wTemp;
 		ar >> m_StartPoint;
 		ar >> m_EndPoint;
 		ar >> m_LineColor;

@@ -106,6 +106,7 @@
     <ClInclude Include="GraphicEditorDoc.h" />
     <ClInclude Include="GraphicEditorView.h" />
     <ClInclude Include="GRectangle.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Resource.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="GraphicEditorDoc.cpp" />
     <ClCompile Include="GraphicEditorView.cpp" />
     <ClCompile Include="GRectangle.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="stdafx.cpp">

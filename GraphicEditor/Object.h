@@ -20,7 +20,7 @@ public:
 	virtual void Serialize(CArchive& ar);
 
 public:
-	GraphicObjectType GetType(void) const { return m_sType; }	//그래피컬 개체의 타입을 반환
+	GraphicObjectType GetType(void) const { return m_Type; }	//그래피컬 개체의 타입을 반환
 	int getMoveMode(){ return moveMode; }
 	CPoint GetStartPoint(void) const { return m_StartPoint; }	//시작점 반환
 	CPoint GetEndPoint(void) const { return m_EndPoint; }		//종료점 반환
@@ -54,7 +54,7 @@ public:
 	void setLinePattern(int pattern){ m_linePattern = pattern; }
 	virtual void Move(int dX, int dY) {}						//좌표 이동
 protected:
-	GraphicObjectType m_sType;		//그래피컬 개체의 타입
+	GraphicObjectType m_Type;		//그래피컬 개체의 타입
 	CPoint m_StartPoint;			//시작점(left,top의 좌표)	
 	CPoint m_EndPoint;				//종료점(right,bottom의 좌표)
 	COLORREF m_LineColor;			//선 색

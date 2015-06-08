@@ -10,7 +10,7 @@ IMPLEMENT_SERIAL(GEllipse, Object, 0)
 
 GEllipse::GEllipse()
 {
-	Object::m_sType = ELLIPSE;
+	Object::m_Type = ELLIPSE;
 	m_FillColor = RGB(255, 255, 255);
 }
 
