@@ -134,6 +134,18 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 
+	if (psDoc->m_CurrentType == POLYLINE && m_Draw) {
+		CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
+		CPen *oldPen = dc.SelectObject(&cpen);
+
+		dc.MoveTo(m_ptStart);
+		dc.LineTo(point);
+		_oldPoint = point;
+
+		dc.SelectObject(oldPen);
+		return;
+	}
+
 	switch (psDoc->m_CurrentType)
 	{
 	case SELECT:
@@ -147,6 +159,10 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		break;
 	case POLYLINE:
 		psDoc->GetPolyLine(TRUE)->AddOnePt(point);//새로 생성
+
+		dc.MoveTo(m_ptStart);
+		dc.LineTo(point);
+		_oldPoint = point;
 		break;
 
 	case ELLIPSE:
@@ -193,9 +209,14 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			dc.SetROP2(oldMode);
 			break;
 		case POLYLINE:
+			if (m_DrawPoly == TRUE)
+			{
+				m_DBClick = FALSE;
+				m_CurrPoint = point;
+			}
 			oldMode = dc.SetROP2(R2_NOT);
-			dc.MoveTo(_anchor);
-			dc.LineTo(_oldPoint);
+			dc.SelectStockObject(NULL_BRUSH);
+			_oldPoint = point;
 			dc.SetROP2(oldMode);
 
 			break;
@@ -223,6 +244,25 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
 	TRACE("OnButtonUp : %d\n", nFlags);
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
+
+	if (psDoc->m_CurrentType == POLYLINE) {
+		CClientDC dc(this);
+
+		CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
+		CPen *oldPen = dc.SelectObject(&cpen);
+
+		dc.MoveTo(_drawTo);
+		dc.LineTo(point);
+
+		dc.SelectObject(oldPen);
+
+		//psDoc->GetPolyLine()->addPoint(point);
+
+		_drawTo = point;
+		m_Draw = TRUE;
+		return;
+	}
+
 	if (m_Draw == TRUE)
 	{
 		//CRect selectRect = MakeSelectRect();
@@ -235,6 +275,16 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			dc.LineTo(m_ptEnd);
 			break;
 			
+			psDoc->GetGRectangle()->setRect(_anchor, point);
+			break;
+		/*case POLYLINE:
+			m_ptEnd = point;
+			dc.MoveTo(m_ptStart);
+			dc.LineTo(m_ptEnd);
+			dc.MoveTo(m_ptEnd);
+			dc.LineTo(m_ptEnd);
+			break;*/
+		case RECTANGLE:
 			psDoc->GetGRectangle()->setRect(_anchor, point);
 			break;
 		}
