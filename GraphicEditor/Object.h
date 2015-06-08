@@ -18,7 +18,6 @@ public:
 	Object();
 	virtual ~Object();
 	virtual void Serialize(CArchive& ar);
-	//virtual void draw(CDC* pDc) = 0;
 
 public:
 	GraphicObjectType GetType(void) const { return m_Type; }	//그래피컬 개체의 타입을 반환
