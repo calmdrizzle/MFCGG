@@ -177,7 +177,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		break;
 	}
 
-
+	_anchor = _drawTo = _oldPoint = point;
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -240,7 +240,10 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			dc.MoveTo(m_ptStart);
 			dc.LineTo(m_ptEnd);
 			break;
+		case RECTANGLE:
 			
+			psDoc->GetGRectangle()->setRect(_anchor, point);
+			break;
 		}
 		//Invalidate(FALSE);
 	}
