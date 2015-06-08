@@ -151,12 +151,14 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	case ELLIPSE:
 		break;
-
+	
 	case RECTANGLE:
 		psDoc->GetGRectangle(TRUE);
 		psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
 		break;
 	}
+
+
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -182,7 +184,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 
 		switch (psDoc->m_CurrentType)
-		{
+{
 		case LINE:
 			//psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
 			oldMode = dc.SetROP2(R2_NOT);
@@ -205,9 +207,9 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			_oldPoint = point;
 			dc.SetROP2(oldMode);
 			break;
-		}
-		//Invalidate();
 	}
+		//Invalidate();
+}
 
 	CView::OnMouseMove(nFlags, point);
 }
@@ -232,11 +234,9 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			dc.MoveTo(m_ptStart);
 			dc.LineTo(m_ptEnd);
 			break;
-		case POLYLINE:
-			m_ptEnd = point;
-			dc.MoveTo(m_ptStart);
-			break;
 			
+			psDoc->GetGRectangle()->setRect(_anchor, point);
+			break;
 		}
 		//Invalidate(FALSE);
 	}
@@ -266,7 +266,7 @@ void CGraphicEditorView::OnUpdateRectangle(CCmdUI *pCmdUI)
 }
 
 void CGraphicEditorView::OnUpdatePolyline(CCmdUI *pCmdUI)
-{
+	{
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 	BOOL bsEnable = GetDocument()->m_CurrentType == POLYLINE;
 	pCmdUI->SetCheck(bsEnable);
@@ -278,7 +278,7 @@ void CGraphicEditorView::OnUpdatePolyline(CCmdUI *pCmdUI)
 // CGraphicEditorView 메시지 처리기
 
 void CGraphicEditorView::OnLine()
-{
+		{
 	//GetDocument()->m_CurrentType = LINE;
 	CGraphicEditorDoc* psDoc = GetDocument();
 	psDoc->m_CurrentType = LINE;
@@ -311,10 +311,10 @@ void CGraphicEditorView::OnRectangle()
 	if (!m_selected){
 		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
 		//doc->m_sSelectedList.RemoveAll();
-	}
+		}
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-}
-
+	}
+	
 void CGraphicEditorView::OnPolyline()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
