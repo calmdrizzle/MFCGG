@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_COMMAND(ID_ELLIPSE, &CGraphicEditorView::OnEllipse)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -145,8 +146,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		break;
 
 	case LINE:
-		m_ptStart = point;
-		//psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
+		psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
 		//속성에서 변경한 내용 가져와 지정
 		//psDoc->GetLine()->SetAlpha(CDrawPropertyValue::m_nsAlpha);
 		//psDoc->GetLine()->SetPenStyle(CDrawPropertyValue::m_nsPenStyle);
@@ -195,5 +195,43 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 	m_ptEnd = point;
 	dc.MoveTo(m_ptStart);
 	dc.LineTo(m_ptEnd);
+	TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
+	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
+	if (m_Draw == TRUE)
+	{
+		//CRect selectRect = MakeSelectRect();
+		switch (psDoc->m_CurrType)
+		{
+		case LINE:
+			psDoc->GetLine()->SetEndPoint(point); // 완전한 종료점을 지정
+			//psDoc->CheckPoint(); //Undo 가능함을 알림
+			GetDocument()->SetModifiedFlag(); //도큐먼트에 변경되었음을 알림
+			break;
+		}
+	}
 	CView::OnLButtonUp(nFlags, point);
+}
+
+
+void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if (m_Draw == TRUE)
+	{
+		CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
+
+		//이동 시 delta x,y 구하기
+		int dx = point.x - psDoc->m_ClickedPoint.x,
+			dy = point.y - psDoc->m_ClickedPoint.y;
+		psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
+		switch (psDoc->m_CurrType)
+		{
+		case LINE:
+			psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
+			break;
+		}
+		//Invalidate();
+	}
+	
+	CView::OnMouseMove(nFlags, point);
 }
