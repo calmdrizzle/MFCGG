@@ -277,9 +277,8 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			dc.LineTo(_oldPoint);
 
 			dc.MoveTo(_anchor);
-			dc.LineTo(point);
-			_oldPoint = point;
-
+			dc.LineTo(_oldPoint);
+			//_oldPoint = point;
 			dc.SetROP2(oldMode);
 			break;
 		case RECTANGLE:
