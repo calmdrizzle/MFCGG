@@ -151,6 +151,21 @@ Line* CGraphicEditorDoc::GetLine(BOOL bIsNew)
 	return NULL; //잘못된 사용 시에는 NULL을 반환
 }
 
+PolyLine* CGraphicEditorDoc::GetPolyLine(BOOL bIsNew)
+{
+	if (bIsNew == TRUE)
+	{
+		m_CurrObject = new PolyLine(); //새로운 GPolyline 객체 생성
+		//m_sGObjectList.AddTail(m_sCurrObject); //리스트에 추가
+
+		return (PolyLine*)m_CurrObject;
+	}
+	else if (m_CurrObject != NULL && m_CurrType == POLYLINE) //현재 타입이 폴리라인이고, NULL이 아닐 때
+		return (PolyLine*)m_CurrObject;
+
+	return NULL; //잘못된 사용 시에는 NULL을 반환하도록 함
+}
+
 GRectangle* CGraphicEditorDoc::GetGRectangle(BOOL blsNew)
 {
 	if (blsNew) {

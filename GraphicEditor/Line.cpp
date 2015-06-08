@@ -21,7 +21,6 @@ Line::Line(const Line& ponitL)//복사 생성자
 	this->Object::m_StartPoint = ponitL.Object::m_StartPoint;
 	this->Object::m_EndPoint = ponitL.Object::m_EndPoint;
 	this->Object::m_Thickness = ponitL.Object::m_Thickness;
-	//this->MENU::m_Grouped = pointL.MENU::m_bsGrouped;
 }
 
 Line::~Line()

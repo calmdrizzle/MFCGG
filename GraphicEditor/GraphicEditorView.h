@@ -70,6 +70,8 @@ public:
 	afx_msg void OnRectangle();
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnUpdatePolyline(CCmdUI *pCmdUI);
+	afx_msg void OnPolyline();
 };
 
 #ifndef _DEBUG  // GraphicEditorView.cpp의 디버그 버전

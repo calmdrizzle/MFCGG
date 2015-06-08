@@ -38,6 +38,8 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
+	ON_UPDATE_COMMAND_UI(ID_POLYLINE, &CGraphicEditorView::OnUpdatePolyline)
+	ON_COMMAND(ID_POLYLINE, &CGraphicEditorView::OnPolyline)
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -119,30 +121,6 @@ CGraphicEditorDoc* CGraphicEditorView::GetDocument() const // 디버그되지 않은 버
 }
 #endif //_DEBUG
 
-void CGraphicEditorView::OnUpdateEllipse(CCmdUI *pCmdUI)
-{
-	BOOL bsEnable = GetDocument()->m_CurrentType == ELLIPSE;
-	pCmdUI->SetCheck(bsEnable);
-	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-}
-
-void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
-{
-	BOOL bsEnable = GetDocument()->m_CurrentType == LINE;
-	pCmdUI->SetCheck(bsEnable);
-	m_Draw = TRUE;
-	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-}
-
-void CGraphicEditorView::OnUpdateRectangle(CCmdUI *pCmdUI)
-{
-	BOOL bsEnable = GetDocument()->m_CurrentType == RECTANGLE;
-	pCmdUI->SetCheck(bsEnable);
-	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-}
-
-// CGraphicEditorView 메시지 처리기
-
 
 void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -167,20 +145,137 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		//m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 		//psDoc->GetLine()->setLine(ToolValues::LineWidth, ToolValues::FgColor);
 		break;
+	case POLYLINE:
+		psDoc->GetPolyLine(TRUE)->AddOnePt(point);//새로 생성
+		break;
 
 	case ELLIPSE:
 		break;
-	
+
 	case RECTANGLE:
 		psDoc->GetGRectangle(TRUE);
 		psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
 		break;
 	}
 
-
-
 	CView::OnLButtonDown(nFlags, point);
 }
+
+
+void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CString str;
+	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
+	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	//pMainFrame->m_wndStatusBar.SetPaneText(2, str);
+	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
+	CClientDC dc(this);
+	//이동 시 delta x,y 구하기
+	int dx = point.x - psDoc->m_ClickedPoint.x,
+		dy = point.y - psDoc->m_ClickedPoint.y;
+	psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
+	int oldMode;
+	//int radius;
+
+	if (m_Draw == TRUE)
+	{
+
+		switch (psDoc->m_CurrentType)
+		{
+		case LINE:
+			//psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
+			oldMode = dc.SetROP2(R2_NOT);
+			dc.MoveTo(_anchor);
+			dc.LineTo(_oldPoint);
+			dc.SetROP2(oldMode);
+			break;
+		case POLYLINE:
+			oldMode = dc.SetROP2(R2_NOT);
+			dc.MoveTo(_anchor);
+			dc.LineTo(_oldPoint);
+			dc.SetROP2(oldMode);
+
+			break;
+		case RECTANGLE:
+			oldMode = dc.SetROP2(R2_NOT);
+			dc.SelectStockObject(NULL_BRUSH);
+			dc.Rectangle(_oldPoint.x, _oldPoint.y, _anchor.x, _anchor.y);
+			dc.Rectangle(_anchor.x, _anchor.y, point.x, point.y);
+			_oldPoint = point;
+			dc.SetROP2(oldMode);
+			break;
+		}
+		//Invalidate();
+	}
+
+	CView::OnMouseMove(nFlags, point);
+}
+
+void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CClientDC dc(this);
+	
+	
+	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
+	TRACE("OnButtonUp : %d\n", nFlags);
+	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
+	if (m_Draw == TRUE)
+	{
+		//CRect selectRect = MakeSelectRect();
+		switch (psDoc->m_CurrentType)
+		{
+		case LINE:
+			//psDoc->GetLine()->setPoint(_anchor, point);
+			m_ptEnd = point;
+			dc.MoveTo(m_ptStart);
+			dc.LineTo(m_ptEnd);
+			break;
+		case POLYLINE:
+			m_ptEnd = point;
+			dc.MoveTo(m_ptStart);
+			break;
+			
+		}
+		//Invalidate(FALSE);
+	}
+	CView::OnLButtonUp(nFlags, point);
+}
+
+void CGraphicEditorView::OnUpdateEllipse(CCmdUI *pCmdUI)
+{
+	BOOL bsEnable = GetDocument()->m_CurrentType == ELLIPSE;
+	pCmdUI->SetCheck(bsEnable);
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
+void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
+{
+	BOOL bsEnable = GetDocument()->m_CurrentType == LINE;
+	pCmdUI->SetCheck(bsEnable);
+	m_Draw = TRUE;
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
+void CGraphicEditorView::OnUpdateRectangle(CCmdUI *pCmdUI)
+{
+	BOOL bsEnable = GetDocument()->m_CurrentType == RECTANGLE;
+	pCmdUI->SetCheck(bsEnable);
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
+void CGraphicEditorView::OnUpdatePolyline(CCmdUI *pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	BOOL bsEnable = GetDocument()->m_CurrentType == POLYLINE;
+	pCmdUI->SetCheck(bsEnable);
+	m_Draw = TRUE;
+}
+
+
+
+// CGraphicEditorView 메시지 처리기
 
 void CGraphicEditorView::OnLine()
 {
@@ -220,78 +315,17 @@ void CGraphicEditorView::OnRectangle()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
 
-void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
+void CGraphicEditorView::OnPolyline()
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	CClientDC dc(this);
-	
-	
-	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
-	TRACE("OnButtonUp : %d\n", nFlags);
-	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
-	if (m_Draw == TRUE)
-	{
-		//CRect selectRect = MakeSelectRect();
-		switch (psDoc->m_CurrentType)
-		{
-		case LINE:
-			//psDoc->GetLine()->setPoint(_anchor, point);
-			m_ptEnd = point;
-			dc.MoveTo(m_ptStart);
-			dc.LineTo(m_ptEnd);
-			break;
-			
-		}
-		//Invalidate(FALSE);
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGraphicEditorDoc* psDoc = GetDocument();
+	psDoc->m_CurrentType = POLYLINE;
+	m_drawMode = 1;
+	m_selected = FALSE;
+	m_Draw = TRUE;
+	if (!m_selected){
+		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
+		//doc->m_sSelectedList.RemoveAll();
 	}
-	CView::OnLButtonUp(nFlags, point);
 }
 
-
-void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	CString str;
-	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
-	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
-	//pMainFrame->m_wndStatusBar.SetPaneText(2, str);
-		CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
-		CClientDC dc(this);
-		//이동 시 delta x,y 구하기
-		int dx = point.x - psDoc->m_ClickedPoint.x,
-			dy = point.y - psDoc->m_ClickedPoint.y;
-		psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
-		int oldMode;
-	//int radius;
-
-	if (m_Draw == TRUE)
-	{
-
-		switch (psDoc->m_CurrentType)
-		{
-		case LINE:
-			//psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
-			oldMode = dc.SetROP2(R2_NOT);
-
-			dc.MoveTo(_anchor);
-			dc.LineTo(_oldPoint);
-
-			dc.MoveTo(_anchor);
-			dc.LineTo(_oldPoint);
-			//_oldPoint = point;
-			dc.SetROP2(oldMode);
-			break;
-		case RECTANGLE:
-			oldMode = dc.SetROP2(R2_NOT);
-			dc.SelectStockObject(NULL_BRUSH);
-			dc.Rectangle(_oldPoint.x, _oldPoint.y, _anchor.x, _anchor.y);
-			dc.Rectangle(_anchor.x, _anchor.y, point.x, point.y);
-			_oldPoint = point;
-			dc.SetROP2(oldMode);
-			break;
-		}
-		//Invalidate();
-	}
-	
-	CView::OnMouseMove(nFlags, point);
-}
