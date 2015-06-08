@@ -10,6 +10,10 @@ IMPLEMENT_SERIAL(GRectangle, Object, 0)
 
 GRectangle::GRectangle()
 {
+
+
+
+
 }
 
 GRectangle::~GRectangle()
