@@ -20,6 +20,7 @@ public:
 	void draw(CDC* pDc);
 	int drawType(void);
 	virtual void Serialize(CArchive& ar);
+	void deserialize(CArchive& ar);
 
 	void setRect(CPoint& topLeft, CPoint& bottomRight);
 	void setProps(int& lineWidth, COLORREF& lineColor, COLORREF& fillColor);

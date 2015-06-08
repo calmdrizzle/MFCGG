@@ -7,6 +7,7 @@
 #include "Object.h"
 #include "GEllipse.h"
 #include "Line.h"
+#include "GRectangle.h"
 
 
 class CGraphicEditorDoc : public CDocument
@@ -18,6 +19,7 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	Line* GetLine(BOOL bIsNew = FALSE);
+	GRectangle* GetGRectangle(BOOL blsNew = FALSE);
 
 // 작업입니다.
 public:

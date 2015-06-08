@@ -9,6 +9,7 @@
 #include "GraphicEditor.h"
 #include "MainFrm.h" 
 #include "Object.h"
+
 #endif
 
 #include "GraphicEditorDoc.h"
@@ -70,6 +71,10 @@ void CGraphicEditorView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
+	CRect rec, rect;
+	GetClientRect(rec);
+
+	TRACE("OnDraw Rect(%d, %d, %d, %d)\n", rec.top, rec.left, rec.bottom, rec.right);
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }
 
@@ -150,7 +155,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	//m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 
-	switch (psDoc->m_CurrType)
+	switch (psDoc->m_CurrentType)
 	{
 	case SELECT:
 		break;
@@ -165,8 +170,12 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	case ELLIPSE:
 		break;
 	
+	case RECTANGLE:
+		psDoc->GetGRectangle(TRUE);
+		psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
+		break;
 	}
-	GEllipse* g = new GEllipse();
+
 
 
 	CView::OnLButtonDown(nFlags, point);
@@ -223,7 +232,7 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 	if (m_Draw == TRUE)
 	{
 		//CRect selectRect = MakeSelectRect();
-		switch (psDoc->m_CurrType)
+		switch (psDoc->m_CurrentType)
 		{
 		case LINE:
 			psDoc->GetLine()->setPoint(_anchor, point);
@@ -257,7 +266,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 		int oldMode;
 		int radius;
 
-		switch (psDoc->m_CurrType)
+		switch (psDoc->m_CurrentType)
 		{
 		case LINE:
 			//psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
@@ -270,6 +279,14 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			dc.LineTo(point);
 			_oldPoint = point;
 
+			dc.SetROP2(oldMode);
+			break;
+		case RECTANGLE:
+			oldMode = dc.SetROP2(R2_NOT);
+			dc.SelectStockObject(NULL_BRUSH);
+			dc.Rectangle(_oldPoint.x, _oldPoint.y, _anchor.x, _anchor.y);
+			dc.Rectangle(_anchor.x, _anchor.y, point.x, point.y);
+			_oldPoint = point;
 			dc.SetROP2(oldMode);
 			break;
 		}

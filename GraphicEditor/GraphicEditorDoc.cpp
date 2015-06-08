@@ -150,3 +150,17 @@ Line* CGraphicEditorDoc::GetLine(BOOL bIsNew)
 
 	return NULL; //잘못된 사용 시에는 NULL을 반환
 }
+
+GRectangle* CGraphicEditorDoc::GetGRectangle(BOOL blsNew)
+{
+	if (blsNew) {
+		m_CurrObject = new GRectangle();
+		//m_DrawObjs.AddTail(m_Cur);
+
+		return (GRectangle*)m_CurrObject;
+	}
+	if (m_CurrObject != NULL && m_CurrType == RECTANGLE) {
+		return (GRectangle*)m_CurrObject;
+	}
+	return NULL;
+}

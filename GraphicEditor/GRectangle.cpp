@@ -15,6 +15,9 @@ GRectangle::GRectangle()
 GRectangle::~GRectangle()
 {
 }
+COLORREF Object::FgColor = RGB(0, 0, 0);
+COLORREF Object::BgColor = RGB(255, 255, 255);
+int Object::LineWidth = 1;
 
 void GRectangle::draw(CDC* pDc) {
 
@@ -39,6 +42,11 @@ void GRectangle::Serialize(CArchive& ar) {
 	ar << m_topLeft << m_bottomRight/* << m_type*/ << m_Thickness << m_lineColor << m_fillColor;
 }
 
+void GRectangle::deserialize(CArchive& ar) {
+	//int type;
+	ar >> m_topLeft >> m_bottomRight /*>> type*/ >> m_Thickness >> m_lineColor >> m_fillColor;
+	//m_type = (FIGURETYPE)type;
+}
 
 
 void GRectangle::setRect(CPoint& topLeft, CPoint& bottomRight)
