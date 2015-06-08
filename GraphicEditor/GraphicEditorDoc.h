@@ -27,6 +27,7 @@ public:
 	GraphicObjectType m_CurrType;		//
 
 
+
 // 재정의입니다.
 public:
 	virtual BOOL OnNewDocument();

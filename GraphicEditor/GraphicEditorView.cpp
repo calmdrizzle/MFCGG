@@ -124,6 +124,7 @@ void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
 {
 	BOOL bsEnable = GetDocument()->m_CurrentType == LINE;
 	pCmdUI->SetCheck(bsEnable);
+	m_Draw = TRUE;
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
 
@@ -140,13 +141,14 @@ void CGraphicEditorView::OnUpdateRectangle(CCmdUI *pCmdUI)
 void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CClientDC dc(this);
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	//SetCapture(); // 마우스 캡쳐
+	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
+
 	CMainFrame *ppMainFrame = (CMainFrame *)AfxGetMainWnd();
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
+
 	m_Draw = TRUE; //그리기 시작
-	//psDoc->m_sClickedPoint = point;
-	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
+
+	//m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 
 	switch (psDoc->m_CurrType)
 	{
@@ -155,16 +157,11 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	case LINE:
 		psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
-		//속성에서 변경한 내용 가져와 지정
-		//psDoc->GetLine()->SetAlpha(CDrawPropertyValue::m_nsAlpha);
-		//psDoc->GetLine()->SetPenStyle(CDrawPropertyValue::m_nsPenStyle);
-		//psDoc->GetLine()->SetLineColor(CDrawPropertyValue::m_sLineColor);
-		//psDoc->GetLine()->SetThickness(CDrawPropertyValue::m_nsThickness);
-		//psDoc->GetLine()->SetStartCap(CDrawPropertyValue::m_nsStartCap);
-		//psDoc->GetLine()->SetEndCap(CDrawPropertyValue::m_nsEndCap);
-		//m_Draw = FALSE;
+		psDoc->GetLine(TRUE);
+		m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
+		//psDoc->GetLine()->setLine(ToolValues::LineWidth, ToolValues::FgColor);
 		break;
-	
+
 	case ELLIPSE:
 		break;
 	
@@ -177,9 +174,12 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CGraphicEditorView::OnLine()
 {
-	GetDocument()->m_CurrentType = LINE;
+	//GetDocument()->m_CurrentType = LINE;
+	CGraphicEditorDoc* psDoc = GetDocument();
+	psDoc->m_CurrentType = LINE;
 	m_drawMode = 1;
 	m_selected = FALSE;
+	m_Draw = TRUE;
 	if (!m_selected){
 		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
 		//doc->m_sSelectedList.RemoveAll();
@@ -216,9 +216,9 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
 	m_ptEnd = point;
-	dc.MoveTo(m_ptStart);
-	dc.LineTo(m_ptEnd);
-	TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
+	
+	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
+	TRACE("OnButtonUp : %d\n", nFlags);
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
 	if (m_Draw == TRUE)
 	{
@@ -226,11 +226,13 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 		switch (psDoc->m_CurrType)
 		{
 		case LINE:
-			psDoc->GetLine()->SetEndPoint(point); // 완전한 종료점을 지정
-			//psDoc->CheckPoint(); //Undo 가능함을 알림
-			GetDocument()->SetModifiedFlag(); //도큐먼트에 변경되었음을 알림
+			psDoc->GetLine()->setPoint(_anchor, point);
+			dc.MoveTo(m_ptStart);
+			dc.LineTo(m_ptEnd);
 			break;
+			
 		}
+		//Invalidate(FALSE);
 	}
 	CView::OnLButtonUp(nFlags, point);
 }
@@ -239,18 +241,36 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CString str;
+	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
+	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	//pMainFrame->m_wndStatusBar.SetPaneText(2, str);
+
 	if (m_Draw == TRUE)
 	{
 		CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
-
+		CClientDC dc(this);
 		//이동 시 delta x,y 구하기
 		int dx = point.x - psDoc->m_ClickedPoint.x,
 			dy = point.y - psDoc->m_ClickedPoint.y;
 		psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
+		int oldMode;
+		int radius;
+
 		switch (psDoc->m_CurrType)
 		{
 		case LINE:
-			psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
+			//psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
+			oldMode = dc.SetROP2(R2_NOT);
+
+			dc.MoveTo(_anchor);
+			dc.LineTo(_oldPoint);
+
+			dc.MoveTo(_anchor);
+			dc.LineTo(point);
+			_oldPoint = point;
+
+			dc.SetROP2(oldMode);
 			break;
 		}
 		//Invalidate();

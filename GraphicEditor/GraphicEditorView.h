@@ -26,6 +26,7 @@ public:
 	int m_LinepatternIndex;
 	int m_FlagNewLine;
 	BOOL m_Draw;	//그리기 모드인지 TRUE와 FALSE로 구분
+	CPoint _anchor, _drawTo, _oldPoint;
 
 // 작업입니다.
 public:
