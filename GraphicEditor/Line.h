@@ -19,6 +19,7 @@ public:
 	int drawType(void);
 	void serialize(CArchive& ar);
 	void deserialize(CArchive& ar);
+	
 
 	void setPoint(CPoint& start, CPoint& end);
 	void setBeeLine(int& lineWidth, COLORREF& color);

@@ -22,3 +22,7 @@ Object::Object()
 Object::~Object()
 {
 }
+
+void Object::SetStartPoint(CPoint pt){
+	m_StartPoint = pt;
+}

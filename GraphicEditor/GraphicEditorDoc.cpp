@@ -191,3 +191,17 @@ Line* CGraphicEditorDoc::GetLine(bool bIsNew)
 	}
 	return NULL;
 }*/
+
+Text* CGraphicEditorDoc::GetText(bool bIsNew)
+{
+	if (bIsNew) {
+		m_Cur = new Text();
+		m_DrawObjs.AddTail(m_Cur);
+
+		return (Text*)m_Cur;
+	}
+	if (m_Cur != NULL && m_Cur->drawType() == TEXT) {
+		return (Text*)m_Cur;
+	}
+	return NULL;
+}

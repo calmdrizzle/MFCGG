@@ -16,7 +16,7 @@ private:
 
 	//현재 그려지는 GDIObject의 속성들
 	CPen m_curPen;
-
+	CPoint m_ptStart;
 	BOOL _bDrawMode;
 	CPoint _anchor, _drawTo, _oldPoint;
 	BOOL _bDoing;
@@ -34,6 +34,7 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
+	virtual void OnDraw(CDC* pDC);
 	CGraphicEditorDoc* GetDocument() const;
 	virtual ~CGraphicEditorView();
 #ifdef _DEBUG
@@ -44,7 +45,7 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
 protected:
-	virtual void OnDraw(CDC* pDc);
+	
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
@@ -81,7 +82,6 @@ protected:
 
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	DECLARE_MESSAGE_MAP()
 
@@ -94,6 +94,9 @@ public:
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnLine();
 	afx_msg void OnUpdateLine(CCmdUI *pCmdUI);
+	afx_msg void OnText();
+	afx_msg void OnUpdateText(CCmdUI *pCmdUI);
+	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // testView.cpp의 디버그 버전

@@ -31,11 +31,14 @@ public:
 	static int FontSize;
 	static CString FontName;
 	static int FontMode;
+	CPoint m_StartPoint;
 
 	virtual void draw(CDC* pDc) = 0;
 	virtual int drawType(void) = 0;
 	virtual void serialize(CArchive& ar) = 0;
 	virtual void deserialize(CArchive& ar) = 0;
+	CPoint GetStartPoint(void) const { return m_StartPoint; }	//시작점 반환
+	void SetStartPoint(CPoint pt);
 	
 };
 

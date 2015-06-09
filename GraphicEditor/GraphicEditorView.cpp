@@ -55,6 +55,9 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 
 ON_COMMAND(ID_LINE, &CGraphicEditorView::OnLine)
 ON_UPDATE_COMMAND_UI(ID_LINE, &CGraphicEditorView::OnUpdateLine)
+ON_COMMAND(ID_TEXT, &CGraphicEditorView::OnText)
+ON_UPDATE_COMMAND_UI(ID_TEXT, &CGraphicEditorView::OnUpdateText)
+ON_WM_CHAR()
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -105,12 +108,36 @@ void CGraphicEditorView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	CRect rec, rect;
+	/*CRect rec, rect;
 	GetClientRect(rec);
 
 	TRACE("OnDraw Rect(%d, %d, %d, %d)\n", rec.top, rec.left, rec.bottom, rec.right);
-	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 
+	pDC->GetClipBox(&rect);
+	TRACE("OnDraw ClipBox(%d, %d, %d, %d)\n", rect.top, rect.left, rect.bottom, rect.right);
+
+	ASSERT_VALID(pDoc);
+
+	_oldBitmap = _memDc->SelectObject(_bitmap);
+	CGdiObject* old = _memDc->SelectStockObject(WHITE_BRUSH);
+	CGdiObject* oldPen = _memDc->SelectStockObject(WHITE_PEN);
+	_memDc->Rectangle(rec);
+	_memDc->SelectObject(oldPen);
+
+	CPtrList* list = &pDoc->getDrawObjects();
+
+	POSITION pos = list->GetHeadPosition();
+	while (pos != NULL) {
+		((Object*)list->GetNext(pos))->draw(_memDc);
+	}
+	
+	//	pDc->SetBkColor(RGB(255, 0, 0));
+
+	pDC->BitBlt(0, 0, _rect.Width(), _rect.Height(), _memDc, 0, 0, SRCCOPY);
+
+	_memDc->SelectObject(old);
+	_memDc->SelectObject(_oldBitmap);
+	*/
 }
 
 
@@ -175,7 +202,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	}*/
 
 	//SetCapture();
-	
+	m_ptStart = point;
 	if (_bDrawMode == TRUE){
 		
 		switch (psDoc->m_CurrentType)
@@ -184,8 +211,22 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 			break;
 
 		case LINE:
-			psDoc->GetLine(TRUE);
+			psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
 			psDoc->GetLine()->setBeeLine(Object::LineWidth, Object::FgColor);
+			break;
+		case TEXT:
+			psDoc->GetText(TRUE)->setPosition(point);
+			psDoc->GetText()->setColor(Object::FgColor, Object::BgColor);
+			psDoc->GetText()->setFontName(Object::FontName);
+			psDoc->GetText()->setFontMode(Object::FontMode);
+			psDoc->GetText()->setFontSize(Object::FontSize);
+
+			TEXTMETRIC txtKey;
+			dc.GetTextMetrics(&txtKey);
+			CreateSolidCaret(1, txtKey.tmHeight);
+			SetCaretPos(point);
+			ShowCaret();
+
 			break;
 		}
 	}
@@ -212,20 +253,12 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 {
 		case LINE:
 			oldMode = dc.SetROP2(R2_NOT);
-
 			dc.MoveTo(_anchor);
 			dc.LineTo(_oldPoint);
-
-			dc.MoveTo(_anchor);
-			dc.LineTo(point);
-			_oldPoint = point;
-
 			dc.SetROP2(oldMode);
-			break;
-
-		
+			break;		
 	}
-		//Invalidate();
+	//Invalidate();
 }
 
 	CView::OnMouseMove(nFlags, point);
@@ -267,6 +300,8 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 		{
 		case LINE:
 			psDoc->GetLine()->setPoint(_anchor, point);
+			dc.MoveTo(m_ptStart);
+			dc.LineTo(point);
 			break;
 		}
 		Invalidate(FALSE);
@@ -501,10 +536,7 @@ void CGraphicEditorView::OnTen()
 void CGraphicEditorView::OnLine()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	//GetDocument()->m_CurrentType = LINE;
-	CGraphicEditorDoc* psDoc = GetDocument();
-	psDoc->m_CurrentType = LINE;
-	//m_drawMode = 1;
+	GetDocument()->m_CurrentType = LINE;
 	m_selected = FALSE;
 	_bDrawMode = TRUE;
 	if (!m_selected){
@@ -520,4 +552,64 @@ void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
 	BOOL bsEnable = GetDocument()->m_CurrentType == LINE;
 	pCmdUI->SetCheck(bsEnable);
 	_bDrawMode = TRUE;
+}
+
+
+void CGraphicEditorView::OnText()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	GetDocument()->m_CurrentType = TEXT;
+	m_selected = FALSE;
+	_bDrawMode = TRUE;
+	if (!m_selected){
+		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
+		//doc->m_sSelectedList.RemoveAll();
+	}
+}
+
+
+void CGraphicEditorView::OnUpdateText(CCmdUI *pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	BOOL bsEnable = GetDocument()->m_CurrentType == TEXT;
+	pCmdUI->SetCheck(bsEnable);
+	_bDrawMode = TRUE;
+}
+
+
+void CGraphicEditorView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CGraphicEditorDoc* doc = GetDocument();
+
+	if (doc->CurDrawType == TEXT) {
+		CClientDC dc(this);
+		Text* td = doc->GetText();
+
+		CSize strSize;
+
+		if (nChar == '\b') {	//백스페이스
+			td->subtractChar();
+		}
+		else {
+			td->insertChar(nChar);
+		}
+
+		CFont font;
+		font.CreatePointFont(Object::FontSize, Object::FontName);
+		/*if (ToolValues::LogFont.lfCharSet != 0) {
+		font.CreateFontIndirect(&(ToolValues::LogFont));
+		}*/
+		CFont* oldFont = dc.SelectObject(&font);
+
+		strSize = dc.GetTextExtent(td->getString());
+
+		SetCaretPos(CPoint(_anchor.x + strSize.cx, _anchor.y));
+		ShowCaret();
+
+		dc.SelectObject(oldFont);
+
+		Invalidate(TRUE);
+	}
+	CView::OnChar(nChar, nRepCnt, nFlags);
 }

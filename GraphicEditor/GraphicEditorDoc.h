@@ -7,6 +7,7 @@
 #include "Object.h"
 #include "GEllipse.h"
 #include "Line.h"
+#include "Text.h"
 //#include "GRectangle.h"
 
 
@@ -23,6 +24,7 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	Line* GetLine(bool bIsNew = FALSE);
+	Text* GetText(bool bIsNew = FALSE);
 	
 	//GRectangle* GetGRectangle(BOOL bIsNew = FALSE);
 	GraphicObjectType CurDrawType;	//현재 선택된 그리기 모드
@@ -43,6 +45,7 @@ public:
 	Object* m_CurrObject;				//
 	GraphicObjectType m_CurrType;		//
 	Object* m_sCurrObject;				//현재 그리는 그래피컬 개체
+	
 	
 	CTypedPtrList<CObList, Object*> m_sGObjectList;	//그리기 저장 리스트
 

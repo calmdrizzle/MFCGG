@@ -46,3 +46,4 @@ void Line::serialize(CArchive& ar) {
 void Line::deserialize(CArchive& ar) {
 	ar >> m_start >> m_end >> m_lineThickness >> m_color;
 }
+
