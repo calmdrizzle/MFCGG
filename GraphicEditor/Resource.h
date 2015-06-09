@@ -21,13 +21,29 @@
 #define ID_32780                        32780
 #define ID_32781                        32781
 #define ID_32782                        32782
+#define ID_32783                        32783
+#define ID_32784                        32784
+#define ID_32785                        32785
+#define ID_32786                        32786
+#define ID_32787                        32787
+#define ID_32788                        32788
+#define ID_32789                        32789
+#define ID_32790                        32790
+#define ID_RED                          32791
+#define ID_BLUE                         32792
+#define ID_GREEN                        32793
+#define ID_BLACK                        32794
+#define ID_white                        32795
+#define ID_ONE                          32796
+#define ID_FIVE                         32797
+#define ID_TEN                          32798
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        311
-#define _APS_NEXT_COMMAND_VALUE         32783
+#define _APS_NEXT_COMMAND_VALUE         32799
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

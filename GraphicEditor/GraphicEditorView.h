@@ -29,7 +29,7 @@ public:
 	COLORREF m_FigureLineColor;
 	COLORREF m_color;		//선 색
 	int m_FigureThickness;
-	int m_LineThickness;	//선 두께
+	int m_LineThickness=1;	//선 두께
 	int m_LinepatternIndex;
 	int m_FlagNewLine;
 	BOOL m_Draw;	//그리기 모드인지 TRUE와 FALSE로 구분
@@ -77,6 +77,14 @@ public:
 	afx_msg void OnUpdatePolyline(CCmdUI *pCmdUI);
 	afx_msg void OnPolyline();
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnRed();
+	afx_msg void OnBlue();
+	afx_msg void OnGreen();
+	afx_msg void OnBlack();
+	afx_msg void Onwhite();
+	afx_msg void OnOne();
+	afx_msg void OnFive();
+	afx_msg void OnTen();
 };
 
 #ifndef _DEBUG  // GraphicEditorView.cpp의 디버그 버전

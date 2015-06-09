@@ -153,6 +153,20 @@ BEGIN
         MENUITEM "»ç°¢Çü",                         ID_RECTANGLE
         MENUITEM "¹®ÀÚ",                          ID_TEXT
     END
+    POPUP "»ö"
+    BEGIN
+        MENUITEM "»¡°­",                          ID_RED
+        MENUITEM "ÆÄ¶û",                          ID_BLUE
+        MENUITEM "ÃÊ·Ï",                          ID_GREEN
+        MENUITEM "°ËÁ¤",                          ID_BLACK
+        MENUITEM "Èò»ö",                          ID_white
+    END
+    POPUP "±½±â"
+    BEGIN
+        MENUITEM "1",                           ID_ONE
+        MENUITEM "5",                           ID_FIVE
+        MENUITEM "10",                          ID_TEN
+    END
 END
 
 

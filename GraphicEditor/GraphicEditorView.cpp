@@ -41,6 +41,14 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_POLYLINE, &CGraphicEditorView::OnUpdatePolyline)
 	ON_COMMAND(ID_POLYLINE, &CGraphicEditorView::OnPolyline)
 	ON_WM_LBUTTONDBLCLK()
+	ON_COMMAND(ID_RED, &CGraphicEditorView::OnRed)
+	ON_COMMAND(ID_BLUE, &CGraphicEditorView::OnBlue)
+	ON_COMMAND(ID_GREEN, &CGraphicEditorView::OnGreen)
+	ON_COMMAND(ID_BLACK, &CGraphicEditorView::OnBlack)
+	ON_COMMAND(ID_white, &CGraphicEditorView::Onwhite)
+	ON_COMMAND(ID_ONE, &CGraphicEditorView::OnOne)
+	ON_COMMAND(ID_FIVE, &CGraphicEditorView::OnFive)
+	ON_COMMAND(ID_TEN, &CGraphicEditorView::OnTen)
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -136,30 +144,8 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 	if (m_Draw == TRUE){
-		/*if (psDoc->m_CurrentType == POLYLINE && m_Draw) {
-			dc.MoveTo(m_ptStart);
-			dc.LineTo(point);		
-			//
-			return;
-		}*/
-		if (psDoc->m_CurrentType == POLYLINE && m_Draw==TRUE) {
-			CClientDC dc(this);
-			CPoint dump;
-			CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
-			CPen *oldPen = dc.SelectObject(&cpen);
-
-			dc.MoveTo(m_CurrPoint);
-			dc.LineTo(point);
-
-			dc.SelectObject(oldPen);
-			//SetCapture();
-			//psDoc->GetPolyLine()->addPoint(point);
-
-			m_CurrPoint = point;
-
-			m_Draw = TRUE;
-			return;
-		}
+		
+		
 
 		switch (psDoc->m_CurrentType)
 		{
@@ -266,6 +252,24 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
 	if (m_Draw == TRUE)
 	{
+		if (psDoc->m_CurrentType == POLYLINE && m_Draw == TRUE) {
+			CClientDC dc(this);
+			CPoint dump;
+			CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
+			CPen *oldPen = dc.SelectObject(&cpen);
+
+			dc.MoveTo(m_CurrPoint);
+			dc.LineTo(point);
+
+			dc.SelectObject(oldPen);
+			//SetCapture();
+			//psDoc->GetPolyLine()->addPoint(point);
+
+			m_CurrPoint = point;
+
+			m_Draw = TRUE;
+			return;
+		}
 		
 		//CRect selectRect = MakeSelectRect();
 		switch (psDoc->m_CurrentType)
@@ -392,3 +396,76 @@ void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	}
 	
 }
+
+
+void CGraphicEditorView::OnRed()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_color = RGB(255, 0, 0);
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);        // 빨간색으로 선을 그림
+	dc.SelectObject(oldPen);
+}
+
+
+void CGraphicEditorView::OnBlue()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_color = RGB(0, 255, 0);
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);        // 빨간색으로 선을 그림
+	dc.SelectObject(oldPen);
+}
+
+
+void CGraphicEditorView::OnGreen()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_color = RGB(0, 0, 255);
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);        // 빨간색으로 선을 그림
+	dc.SelectObject(oldPen);
+}
+
+
+void CGraphicEditorView::OnBlack()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_color = RGB(0, 0, 0);
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);        // 빨간색으로 선을 그림
+	dc.SelectObject(oldPen);
+}
+
+
+void CGraphicEditorView::Onwhite()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_color = RGB(255, 255, 255);
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);        // 빨간색으로 선을 그림
+	dc.SelectObject(oldPen);
+}
+
+
+
