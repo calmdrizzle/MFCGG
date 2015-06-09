@@ -468,4 +468,43 @@ void CGraphicEditorView::Onwhite()
 }
 
 
+void CGraphicEditorView::OnOne()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_LineThickness = 1;
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);
+	dc.SelectObject(oldPen);
+}
 
+
+void CGraphicEditorView::OnFive()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_LineThickness = 5;
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);
+	dc.SelectObject(oldPen);
+}
+
+
+void CGraphicEditorView::OnTen()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CClientDC dc(this);
+	CPen pen;
+	m_LineThickness = 10;
+	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);
+	CPen* oldPen = dc.SelectObject(&pen);
+	dc.MoveTo(m_ptStart);
+	dc.LineTo(m_ptEnd);
+	dc.SelectObject(oldPen);
+}
