@@ -7,22 +7,39 @@
 
 
 // Object
-COLORREF Object::FgColor = RGB(0, 0, 0);
-COLORREF Object::BgColor = RGB(255, 255, 255);
-int Object::LineWidth = 1;
-FIGURETYPE Object::FigureType = BORDERONLY;
-int Object::FontSize = 100;
-CString Object::FontName = _T("Arial");
-int Object::FontMode = TRANSPARENT;
 
 Object::Object()
 {
+	thickness = 5;
+	color = RGB(0, 0, 255);
+	selected = false;
 }
 
 Object::~Object()
 {
 }
+bool Object::isin(CPoint p)
+{
+	CRect crect = getBoundary();
 
-void Object::SetStartPoint(CPoint pt){
-	m_StartPoint = pt;
+	if (crect.left <= p.x && p.x <= crect.right
+		&& crect.top <= p.y && p.y <= crect.bottom)
+		return true;
+	else
+		return false;
 }
+
+void Object::serialize_P(CArchive& ar, bool serialize_flag)
+{
+	if (serialize_flag){
+		int temp = gobj_type;
+		ar << temp << thickness << color << point << movemode << selected;
+		serialize_flag = true;
+	}
+	else {
+		ar >> thickness >> color >> point >> movemode >> selected;
+		serialize_flag = false;
+	}
+}
+
+// Object ¸â¹ö ÇÔ¼ö
