@@ -1,31 +1,36 @@
 #pragma once
-
-// GEllipse 명령 대상입니다.
 #include "Object.h"
+// GEllipse 명령 대상입니다.
+
 class GEllipse : public Object
 {
-protected:
-	DECLARE_SERIAL(GEllipse);
-private:
-	CPoint m_topLeft;
-	CPoint m_bottomRight;
-
-	FIGURETYPE m_type;
-	int m_Thickness;
-	COLORREF m_lineColor;
-	COLORREF m_fillColor;
-
 public:
-	GEllipse(void);
-	virtual ~GEllipse(void);
-	void draw(CDC* pDc);
-	int drawType(void);
-	void serialize(CArchive& ar);
-	void deserialize(CArchive& ar);
+	GEllipse();
+	virtual ~GEllipse();
+	void virtual draw(CDC*);
+	void virtual set(int left, int top, int right, int bottom);
+	void virtual move(int dx, int dy);
 
-	void setRect(CPoint& topLeft, CPoint& bottomRight);
-	void setCircle(CPoint& center, int radius);
-	void setProps(FIGURETYPE type, int& lineWidth, COLORREF& lineColor, COLORREF& fillColor);
+	CRect virtual getBoundary();
+	// void virtual serialize(CArchive& ar, bool serialize_flag);
+
+	void setFull_color(COLORREF c) { full_color = c; }
+	COLORREF getFull_color(){ return full_color; }
+
+	void setFull_pattern(int n){ full_pattern = n; }
+	bool beenIn(CRect rect) { if (rect.PtInRect(point) && rect.PtInRect(point_end))return true; else return false; }
+
+	CPoint getPoint_end(){ return point_end; }
+	int getFull_pattern() { return full_pattern; }
+
+	void virtual drawBoundary(CDC*);
+	bool virtual isin(CPoint p);
+
+	void virtual serialize(CArchive& ar, bool serialize_flag);
+
+private:
+	int full_pattern;
+	COLORREF full_color;
 
 };
 
