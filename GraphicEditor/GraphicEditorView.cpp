@@ -127,11 +127,11 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	
 	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
-	m_Draw = TRUE; //그리기 시작
+
 	//CMainFrame *ppMainFrame = (CMainFrame *)AfxGetMainWnd();
 
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
-
+	CClientDC dc(this);
 	m_Draw = TRUE; //그리기 시작
 
 	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
@@ -289,9 +289,7 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			dc.MoveTo(m_ptEnd);
 			dc.LineTo(m_ptEnd);
 			break;*/
-		case RECTANGLE:
-			psDoc->GetGRectangle()->setRect(_anchor, point);
-			break;
+
 		}
 		Invalidate(FALSE);
 	}
