@@ -159,7 +159,6 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
 	CClientDC dc(this);
 	 //그리기 시작
-	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
 	_bDrawMode = TRUE;
 	
 	//다각형 그리는 중..
@@ -188,31 +187,23 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 			psDoc->GetLine(TRUE);
 			psDoc->GetLine()->setBeeLine(Object::LineWidth, Object::FgColor);
 			break;
-			break;
-
 		}
 	}
 
-// 	CView::OnLButtonDown(nFlags, point);
+	CView::OnLButtonDown(nFlags, point);
 }
 
 
 void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	CString str;
-	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
-	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
-
-	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
+	//도큐먼트 얻어오기
+	//CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	CGraphicEditorDoc* psDoc = GetDocument();
 	CClientDC dc(this);
-
-	//이동 시 delta x,y 구하기
-	int dx = point.x - psDoc->m_ClickedPoint.x,
-		dy = point.y - psDoc->m_ClickedPoint.y;
-	psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
+	
 	int oldMode;
-	//int radius;
+	int radius;
 	
 	if (_bDrawMode == TRUE)
 	{
@@ -220,12 +211,18 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 		switch (psDoc->m_CurrentType)
 {
 		case LINE:
-			//psDoc->GetLine()->SetEndPoint(point); //이동 중에 계속 종료점을 재지정
 			oldMode = dc.SetROP2(R2_NOT);
+
 			dc.MoveTo(_anchor);
 			dc.LineTo(_oldPoint);
+
+			dc.MoveTo(_anchor);
+			dc.LineTo(point);
+			_oldPoint = point;
+
 			dc.SetROP2(oldMode);
 			break;
+
 		
 	}
 		//Invalidate();
@@ -238,58 +235,38 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CClientDC dc(this);
 
-	TRACE("OnButtonUp : %d\n", nFlags);
-	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
-	CString str;
-	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
-	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	 //도큐먼트 얻어오기
+	//CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
 	//pMainFrame->m_wndStatusBar.SetPaneText(2, str);
 
-	if (_bDrawMode == TRUE)
-	{
-		/*if (psDoc->m_CurrentType == POLYLINE && m_Draw == TRUE) {
+	if (_bDrawMode) {
+		_bDrawMode = FALSE;
+		CGraphicEditorDoc* psDoc = GetDocument();
+		ASSERT_VALID(psDoc);
+
+		/*if (doc->CurDrawType == POLYGON) {
 			CClientDC dc(this);
-			CPoint dump;
-			CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
+
+			CPen cpen(PS_SOLID, ToolValues::LineWidth, ToolValues::FgColor);
 			CPen *oldPen = dc.SelectObject(&cpen);
 
-			dc.MoveTo(m_CurrPoint);
+			dc.MoveTo(_drawTo);
 			dc.LineTo(point);
 
 			dc.SelectObject(oldPen);
-			//SetCapture();
-			//psDoc->GetPolyLine()->addPoint(point);
 
-			m_CurrPoint = point;
+			doc->getPolygonDraw()->addPoint(point);
 
-			m_Draw = TRUE;
+			_drawTo = point;
+			_bDoing = TRUE;
 			return;
 		}*/
-		int oldMode;
-//		int radius;
-
-		CGraphicEditorDoc* psDoc = GetDocument();
-		CClientDC dc(this);
-
-		CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
-		CBrush cbrush(Object::BgColor);
-		CPen *oldPen = dc.SelectObject(&cpen);
-		CBrush *oldBrush = dc.SelectObject(&cbrush);
-
+		::ReleaseCapture();
 		//CRect selectRect = MakeSelectRect();
 		switch (psDoc->m_CurrentType)
 		{
 		case LINE:
-			oldMode = dc.SetROP2(R2_NOT);
-
-			dc.MoveTo(_anchor);
-			dc.LineTo(_oldPoint);
-
-			dc.MoveTo(_anchor);
-			dc.LineTo(point);
-			_oldPoint = point;
-
-			dc.SetROP2(oldMode);
+			psDoc->GetLine()->setPoint(_anchor, point);
 			break;
 		}
 		Invalidate(FALSE);
