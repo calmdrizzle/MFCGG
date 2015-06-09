@@ -54,6 +54,8 @@ BEGIN_MESSAGE_MAP(CGraphicEditorDoc, CDocument)
 	ON_COMMAND(ID_FONTSIZE100, &CGraphicEditorDoc::OnFontsize100)
 	ON_COMMAND(ID_ITALIC, &CGraphicEditorDoc::OnItalic)
 	ON_COMMAND(ID_UNDERLINE, &CGraphicEditorDoc::OnUnderline)*/
+	ON_COMMAND(ID_COLOR_BLACK, &CGraphicEditorDoc::OnColorBlack)
+	ON_COMMAND(ID_INCOLOR_BLACK, &CGraphicEditorDoc::OnIncolorBlack)
 END_MESSAGE_MAP()
 
 
@@ -1042,3 +1044,55 @@ p->Invalidate();
 }
 }
 */
+
+void CGraphicEditorDoc::OnColorBlack()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	cur_color = RGB(0, 0, 0);
+
+	if (gobj_context_menu_enabled == true)
+	{
+		POSITION pos = gobj_selected_list.GetHeadPosition();
+
+		while (pos != NULL)
+		{
+			Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
+			gobj->setColor(cur_color);
+		}
+
+		CMainFrame* p = (CMainFrame*)AfxGetMainWnd();
+		p->Invalidate();
+	}
+}
+
+
+void CGraphicEditorDoc::OnIncolorBlack()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	cur_fullcolor = RGB(0, 0, 0);
+
+	if (gobj_context_menu_enabled == true)
+	{
+		POSITION pos = gobj_selected_list.GetHeadPosition();
+
+		while (pos != NULL)
+		{
+			Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
+
+			if (gobj->type() == RECTANGLE)
+			{
+				GRectangle* g = (GRectangle*)gobj;
+				g->setFull_color(cur_fullcolor);
+			}
+			else if (gobj->type() == ELLIPSE)
+			{
+				GEllipse *g = (GEllipse*)gobj;
+				g->setFull_color(cur_fullcolor);
+			}
+
+		}
+
+		CMainFrame* p = (CMainFrame*)AfxGetMainWnd();
+		p->Invalidate();
+	}
+}

@@ -5,6 +5,7 @@
 #include "GraphicEditor.h"
 #include "Text.h"
 #include "Object.h"
+#include "GraphicEditorDoc.h"
 
 
 // Text
@@ -169,7 +170,7 @@ bool Text::isin(CPoint p){
 void Text::draw(CDC* cdc)
 {
 	CRect rect;
-
+	
 	rect.left = point.x;
 	rect.top = point.y;
 	rect.right = point_end.x;
@@ -196,7 +197,7 @@ void Text::draw(CDC* cdc)
 			str.Add(nChar);
 		}
 	}
-	cdc->DrawText(str.GetData(), str.GetSize(), &rect, DT_CENTER | DT_VCENTER);
+	//cdc->DrawText(str.GetData(), str.GetSize(), &rect, DT_CENTER | DT_VCENTER);
 
 	cdc->Rectangle(&rect);
 }

@@ -105,4 +105,6 @@ public:
 	afx_msg void OnFontsize100();
 	afx_msg void OnItalic();
 	afx_msg void OnUnderline();
+	afx_msg void OnColorBlack();
+	afx_msg void OnIncolorBlack();
 };

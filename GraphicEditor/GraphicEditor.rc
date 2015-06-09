@@ -160,7 +160,7 @@ BEGIN
             MENUITEM "빨간색",                         ID_COLOR_RED
             MENUITEM "초록색",                         ID_COLOR_GREEN
             MENUITEM "파란색",                         ID_COLOR_BLUE
-            MENUITEM "검은색",                         ID_32806
+            MENUITEM "검은색",                         ID_COLOR_BLACK
         END
         POPUP "두께"
         BEGIN
@@ -179,7 +179,7 @@ BEGIN
             MENUITEM "빨간색",                         ID_INCOLOR_RED
             MENUITEM "초록색",                         ID_INCOLOR_GREEN
             MENUITEM "파란색",                         ID_INCOLOR_BLUE
-            MENUITEM "검은색",                         ID_32816
+            MENUITEM "검은색",                         ID_INCOLOR_BLACK
         END
         POPUP "내부모양"
         BEGIN
@@ -198,7 +198,7 @@ BEGIN
             MENUITEM "빨간색",                         ID_FCOLOR_RED
             MENUITEM "초록색",                         ID_FCOLOR_GREEN
             MENUITEM "파란색",                         ID_FCOLOR_BLUE
-            MENUITEM "검정색",                         ID_32826
+            MENUITEM "검정색",                         ID_FCOLOR_BLACK
         END
         POPUP "글자크기"
         BEGIN
