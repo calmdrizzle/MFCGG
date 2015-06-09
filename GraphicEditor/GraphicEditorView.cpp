@@ -139,7 +139,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 			dc.MoveTo(m_ptStart);
 			dc.LineTo(point);
-
+			SetCapture();
 			return;
 		}
 
@@ -361,7 +361,7 @@ void CGraphicEditorView::OnPolyline()
 	psDoc->m_CurrentType = POLYLINE;
 	m_drawMode = 1;
 	m_selected = FALSE;
-	m_Draw = TRUE;
+	//m_Draw = TRUE;
 	if (!m_selected){
 		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
 		//doc->m_sSelectedList.RemoveAll();
@@ -378,10 +378,11 @@ void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	ASSERT_VALID(psDoc);
 
 
-	if (m_Draw == TRUE && m_DrawPoly == TRUE) {
+	if (m_Draw == TRUE /*&& m_DrawPoly == TRUE*/) {
 		m_DrawPoly = FALSE; //폴리라인 그리기 종료
 		m_Draw = FALSE; //그리기 모드 종료
 		m_DBClick = TRUE; //더블 클릭 했음을 표시
+		return;
 	}
 	CView::OnLButtonDblClk(nFlags, point);
 }
