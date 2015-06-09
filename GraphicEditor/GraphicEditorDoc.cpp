@@ -179,7 +179,7 @@ Line* CGraphicEditorDoc::GetLine(BOOL bIsNew)
 	return NULL; //잘못된 사용 시에는 NULL을 반환
 }
 
-GRectangle* CGraphicEditorDoc::GetGRectangle(BOOL blsNew)
+/*GRectangle* CGraphicEditorDoc::GetGRectangle(BOOL blsNew)
 {
 	if (blsNew) {
 		m_CurrObject = new GRectangle();
@@ -191,4 +191,4 @@ GRectangle* CGraphicEditorDoc::GetGRectangle(BOOL blsNew)
 		return (GRectangle*)m_CurrObject;
 	}
 	return NULL;
-}
+}*/

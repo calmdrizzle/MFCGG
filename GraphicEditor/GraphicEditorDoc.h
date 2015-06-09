@@ -7,7 +7,7 @@
 #include "Object.h"
 #include "GEllipse.h"
 #include "Line.h"
-#include "GRectangle.h"
+//#include "GRectangle.h"
 
 
 class CGraphicEditorDoc : public CDocument
@@ -23,7 +23,7 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	Line* GetLine(BOOL bIsNew = FALSE);
-	GRectangle* GetGRectangle(BOOL bIsNew = FALSE);
+	//GRectangle* GetGRectangle(BOOL bIsNew = FALSE);
 	GraphicObjectType CurDrawType;	//현재 선택된 그리기 모드
 
 	virtual BOOL OnNewDocument();

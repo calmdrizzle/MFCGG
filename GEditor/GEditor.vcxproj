@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DE2E76B9-BBF0-4D99-89D4-9F0D7B8AB6A0}</ProjectGuid>
-    <RootNamespace>GraphicEditor</RootNamespace>
+    <ProjectGuid>{439C9ED4-EAC7-49C0-82FD-9BD82C7B8C4D}</ProjectGuid>
+    <RootNamespace>GEditor</RootNamespace>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -53,7 +53,6 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,7 +77,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,49 +99,37 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GEllipse.h" />
-    <ClInclude Include="GraphicEditor.h" />
-    <ClInclude Include="GraphicEditorDoc.h" />
-    <ClInclude Include="GraphicEditorView.h" />
-    <ClInclude Include="Line.h" />
+    <ClInclude Include="GEditor.h" />
+    <ClInclude Include="GEditorDoc.h" />
+    <ClInclude Include="GEditorView.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Text.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GEllipse.cpp" />
-    <ClCompile Include="GraphicEditor.cpp" />
-    <ClCompile Include="GraphicEditorDoc.cpp" />
-    <ClCompile Include="GraphicEditorView.cpp" />
-    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="GEditor.cpp" />
+    <ClCompile Include="GEditorDoc.cpp" />
+    <ClCompile Include="GEditorView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GraphicEditor.rc" />
+    <None Include="GEditor.reg" />
+    <None Include="res\GEditor.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\GraphicEditor.rc2" />
+    <ResourceCompile Include="GEditor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\GraphicEditor.ico" />
-    <Image Include="res\GraphicEditorDoc.ico" />
+    <Image Include="res\GEditor.ico" />
+    <Image Include="res\GEditorDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties RESOURCE_FILE="GraphicEditor.rc" />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>

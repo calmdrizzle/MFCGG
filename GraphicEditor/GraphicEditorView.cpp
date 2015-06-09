@@ -53,6 +53,8 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 //	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
 //	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CScrollView::OnFilePrintPreview)
 
+ON_COMMAND(ID_LINE, &CGraphicEditorView::OnLine)
+ON_UPDATE_COMMAND_UI(ID_LINE, &CGraphicEditorView::OnUpdateLine)
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -173,7 +175,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}*/
 
-	SetCapture();
+	//SetCapture();
 	
 	if (_bDrawMode == TRUE){
 		
@@ -191,7 +193,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		}
 	}
 
-	CView::OnLButtonDown(nFlags, point);
+// 	CView::OnLButtonDown(nFlags, point);
 }
 
 
@@ -518,3 +520,27 @@ void CGraphicEditorView::OnTen()
 	dc.SelectObject(oldPen);
 }
 */
+
+void CGraphicEditorView::OnLine()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	//GetDocument()->m_CurrentType = LINE;
+	CGraphicEditorDoc* psDoc = GetDocument();
+	psDoc->m_CurrentType = LINE;
+	//m_drawMode = 1;
+	m_selected = FALSE;
+	_bDrawMode = TRUE;
+	if (!m_selected){
+		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
+		//doc->m_sSelectedList.RemoveAll();
+	}
+}
+
+
+void CGraphicEditorView::OnUpdateLine(CCmdUI *pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+	BOOL bsEnable = GetDocument()->m_CurrentType == LINE;
+	pCmdUI->SetCheck(bsEnable);
+	_bDrawMode = TRUE;
+}

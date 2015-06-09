@@ -20,6 +20,7 @@ private:
 	BOOL _bDrawMode;
 	CPoint _anchor, _drawTo, _oldPoint;
 	BOOL _bDoing;
+	BOOL m_selected;
 
 	int _nZoomRate;
 	int _oldRadius;		//원 그리기 이전 반지름
@@ -48,7 +49,7 @@ protected:
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
-	virtual void OnInitialUpdate();
+	//virtual void OnInitialUpdate();
 
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
@@ -74,7 +75,7 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo);
+	//afx_msg void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo);
 
 	afx_msg void OnViewZoomdefault();
 
@@ -91,6 +92,8 @@ public:
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnLine();
+	afx_msg void OnUpdateLine(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // testView.cpp의 디버그 버전
