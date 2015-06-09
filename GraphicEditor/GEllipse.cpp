@@ -5,7 +5,7 @@
 #include "GraphicEditor.h"
 #include "GEllipse.h"
 
-IMPLEMENT_SERIAL(GEllipse, Object, 0)
+//IMPLEMENT_SERIAL(GEllipse, Object, 0)
 // GEllipse
 
 GEllipse::GEllipse()
