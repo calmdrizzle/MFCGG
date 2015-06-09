@@ -183,6 +183,21 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		psDoc->GetGRectangle(TRUE)->CPointToPoint(point);
 		//psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
 			break;
+
+		case TEXT:
+			psDoc->getTextDraw(TRUE)->setPosition(point);
+			psDoc->getTextDraw()->setColor(Object::FgColor, Object::BgColor);
+			psDoc->getTextDraw()->setFontName(Object::FontName);
+			psDoc->getTextDraw()->setFontMode(Object::FontMode);
+			psDoc->getTextDraw()->setFontSize(Object::FontSize);
+
+			TEXTMETRIC txtKey;
+			dc.GetTextMetrics(&txtKey);
+			CreateSolidCaret(1, txtKey.tmHeight);
+			SetCaretPos(point);
+			ShowCaret();
+
+			break;
 		}
 	}
 
