@@ -132,15 +132,32 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
 	CClientDC dc(this);
-	m_Draw = TRUE; //그리기 시작
+	 //그리기 시작
 
 	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 	if (m_Draw == TRUE){
-		if (psDoc->m_CurrentType == POLYLINE && m_Draw) {
-
+		/*if (psDoc->m_CurrentType == POLYLINE && m_Draw) {
 			dc.MoveTo(m_ptStart);
+			dc.LineTo(point);		
+			//
+			return;
+		}*/
+		if (psDoc->m_CurrentType == POLYLINE && m_Draw==TRUE) {
+			CClientDC dc(this);
+			CPoint dump;
+			CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
+			CPen *oldPen = dc.SelectObject(&cpen);
+
+			dc.MoveTo(m_CurrPoint);
 			dc.LineTo(point);
-			SetCapture();
+
+			dc.SelectObject(oldPen);
+			//SetCapture();
+			//psDoc->GetPolyLine()->addPoint(point);
+
+			m_CurrPoint = point;
+
+			m_Draw = TRUE;
 			return;
 		}
 
@@ -183,8 +200,6 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		}
 	}
 
-	_anchor = _drawTo = _oldPoint = point;
-
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -205,7 +220,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	psDoc->m_ClickedPoint = point; //클릭지점은 현재 포인트로
 	int oldMode;
 	//int radius;
-
+	
 	if (m_Draw == TRUE)
 	{
 
@@ -223,6 +238,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			{
 				m_DBClick = FALSE;
 				m_CurrPoint = point;
+				
 			}
 			break;
 		case RECTANGLE:
@@ -245,30 +261,12 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
 	
-	
 	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
 	TRACE("OnButtonUp : %d\n", nFlags);
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
-
 	if (m_Draw == TRUE)
 	{
-		if (psDoc->m_CurrentType == POLYLINE) {
-			CClientDC dc(this);
-
-			CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
-			CPen *oldPen = dc.SelectObject(&cpen);
-
-			dc.MoveTo(_drawTo);
-			dc.LineTo(point);
-
-			dc.SelectObject(oldPen);
-
-			//psDoc->GetPolyLine()->addPoint(point);
-
-			_drawTo = point;
-			m_Draw = TRUE;
-			return;
-		}
+		
 		//CRect selectRect = MakeSelectRect();
 		switch (psDoc->m_CurrentType)
 		{
@@ -282,13 +280,6 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			psDoc->GetGRectangle()->setRect(_anchor, point);
 			
 			break;
-		/*case POLYLINE:
-			m_ptEnd = point;
-			dc.MoveTo(m_ptStart);
-			dc.LineTo(m_ptEnd);
-			dc.MoveTo(m_ptEnd);
-			dc.LineTo(m_ptEnd);
-			break;*/
 
 		}
 		Invalidate(FALSE);
@@ -323,7 +314,7 @@ void CGraphicEditorView::OnUpdatePolyline(CCmdUI *pCmdUI)
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 	BOOL bsEnable = GetDocument()->m_CurrentType == POLYLINE;
 	pCmdUI->SetCheck(bsEnable);
-	m_Draw = TRUE;
+	
 }
 
 
@@ -376,7 +367,7 @@ void CGraphicEditorView::OnPolyline()
 	psDoc->m_CurrentType = POLYLINE;
 	m_drawMode = 1;
 	m_selected = FALSE;
-	//m_Draw = TRUE;
+	m_Draw = TRUE;
 	if (!m_selected){
 		CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
 		//doc->m_sSelectedList.RemoveAll();
@@ -393,11 +384,11 @@ void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	ASSERT_VALID(psDoc);
 
 
-	if (m_Draw == TRUE /*&& m_DrawPoly == TRUE*/) {
+	if (m_Draw == TRUE && m_DrawPoly == TRUE) {
 		m_DrawPoly = FALSE; //폴리라인 그리기 종료
 		m_Draw = FALSE; //그리기 모드 종료
 		m_DBClick = TRUE; //더블 클릭 했음을 표시
-		return;
+		CView::OnLButtonDblClk(nFlags, point);
 	}
-	CView::OnLButtonDblClk(nFlags, point);
+	
 }
