@@ -33,6 +33,10 @@ public:
 	int m_LinepatternIndex;
 	int m_FlagNewLine;
 	BOOL m_Draw;	//그리기 모드인지 TRUE와 FALSE로 구분
+
+	BOOL m_DrawPoly;	//폴리라인 그리기 상태
+	BOOL m_DBClick; //더블 클릭 상태
+	CPoint m_CurrPoint;//폴리라인 그릴 때 현재 마우스 지점
 	
 
 // 작업입니다.
@@ -72,6 +76,7 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnUpdatePolyline(CCmdUI *pCmdUI);
 	afx_msg void OnPolyline();
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // GraphicEditorView.cpp의 디버그 버전
