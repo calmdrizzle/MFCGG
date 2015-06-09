@@ -7,7 +7,7 @@
 #include "Object.h"
 #include "MainFrm.h"
 #include "Line.h"
-//#include "GPLine.h"
+#include "GPLine.h"
 #include "GEllipse.h"
 #include "GRectangle.h"
 //#include "GText.h"

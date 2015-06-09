@@ -5,7 +5,7 @@
 #pragma once
 #include "Object.h"
 #include "Line.h"
-//#include "GPLine.h"
+#include "GPLine.h"
 #include "GRectangle.h"
 #include "GEllipse.h"
 //#include "GText.h"

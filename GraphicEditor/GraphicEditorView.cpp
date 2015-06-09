@@ -168,7 +168,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		doc->gobj_list.AddTail((void*)g);
 		break;
 	}
-	/*case LINE:
+	case LINE:
 	{
 	isdrawing = true;
 
@@ -186,32 +186,32 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	case POLYLINE:
 	{
-	isdrawing = true;
+		isdrawing = true;
 
-	GPLine* g;
-	if (doc->cur_gobj != NULL)
-	{
-	g = (GPLine*)doc->cur_gobj;
-	g->set(point.x, point.y, point.x, point.y);
-	g->setArr();
+		GPLine* g;
+		if (doc->cur_gobj != NULL)
+		{
+			g = (GPLine*)doc->cur_gobj;
+			g->set(point.x, point.y, point.x, point.y);
+			g->setArr();
 
+		}
+
+		else
+		{
+			g = new GPLine();
+			g->set(point.x, point.y, point.x, point.y);
+			g->setArr();
+			g->setColor(doc->cur_color);
+			g->setThickness(doc->cur_thickness);
+			g->setLinePattern(doc->cur_linepattern);
+
+			doc->cur_gobj = g;
+			doc->gobj_list.AddTail((void*)g);
+		}
+		break;
 	}
-
-	else
-	{
-	g = new GPLine();
-	g->set(point.x, point.y, point.x, point.y);
-	g->setArr();
-	g->setColor(doc->cur_color);
-	g->setThickness(doc->cur_thickness);
-	g->setLinePattern(doc->cur_linepattern);
-
-	doc->cur_gobj = g;
-	doc->gobj_list.AddTail((void*)g);
-	}
-	break;
-	}
-	*/
+	
 	case SELECT:
 	{
 		{

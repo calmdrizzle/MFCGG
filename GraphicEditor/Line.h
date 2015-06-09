@@ -5,24 +5,19 @@
 
 class Line : public Object
 {
-private:
-	CPoint m_start;
-	CPoint m_end;
-
-	int m_lineThickness;
-	COLORREF m_color;
-
 public:
-	Line(void);
-	virtual ~Line(void);
-	void draw(CDC* pDc);
-	int drawType(void);
-	void serialize(CArchive& ar);
-	void deserialize(CArchive& ar);
-	
+	Line();
+	~Line();
+	void virtual draw(CDC*);
+	void virtual set(int left, int top, int right, int bottom);
+	void virtual move(int dx, int dy);
 
-	void setPoint(CPoint& start, CPoint& end);
-	void setBeeLine(int& lineWidth, COLORREF& color);
+	CRect virtual getBoundary();
+	void virtual drawBoundary(CDC*);
+
+	bool virtual isin(CPoint p);
+
+	void virtual serialize(CArchive& ar, bool serialize_flag);
+private:
+
 };
-
-
