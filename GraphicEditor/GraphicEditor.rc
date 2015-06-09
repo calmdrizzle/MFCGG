@@ -153,19 +153,64 @@ BEGIN
         MENUITEM "사각형",                         ID_RECTANGLE
         MENUITEM "문자",                          ID_TEXT
     END
-    POPUP "색"
+    POPUP "속성"
     BEGIN
-        MENUITEM "빨강",                          ID_RED
-        MENUITEM "파랑",                          ID_BLUE
-        MENUITEM "초록",                          ID_GREEN
-        MENUITEM "검정",                          ID_BLACK
-        MENUITEM "흰색",                          ID_white
-    END
-    POPUP "굵기"
-    BEGIN
-        MENUITEM "1",                           ID_ONE
-        MENUITEM "5",                           ID_FIVE
-        MENUITEM "10",                          ID_TEN
+        POPUP "선색상"
+        BEGIN
+            MENUITEM "빨간색",                         ID_COLOR_RED
+            MENUITEM "초록색",                         ID_COLOR_GREEN
+            MENUITEM "파란색",                         ID_COLOR_BLUE
+            MENUITEM "검은색",                         ID_32806
+        END
+        POPUP "두께"
+        BEGIN
+            MENUITEM "1pt ",                        ID_THICKNESS_1
+            MENUITEM "5pt",                         ID_THICKNESS_5
+            MENUITEM "10pt",                        ID_THICKNESS_10
+        END
+        POPUP "선모양"
+        BEGIN
+            MENUITEM "일반",                          ID_LINEPATTERN1
+            MENUITEM "실선",                          ID_LINEPATTERN2
+            MENUITEM "점선",                          ID_LINEPATTERN3
+        END
+        POPUP "내부색상"
+        BEGIN
+            MENUITEM "빨간색",                         ID_INCOLOR_RED
+            MENUITEM "초록색",                         ID_INCOLOR_GREEN
+            MENUITEM "파란색",                         ID_INCOLOR_BLUE
+            MENUITEM "검은색",                         ID_32816
+        END
+        POPUP "내부모양"
+        BEGIN
+            MENUITEM "일반",                          ID_INPATTERN1
+            MENUITEM "대각선",                         ID_INPATTERN2
+            MENUITEM "체크",                          ID_INPATTERN3
+        END
+        POPUP "글꼴"
+        BEGIN
+            MENUITEM "궁서",                          ID_FONT1
+            MENUITEM "굴림",                          ID_FONT2
+            MENUITEM "바탕",                          ID_FONT3
+        END
+        POPUP "글자색"
+        BEGIN
+            MENUITEM "빨간색",                         ID_FCOLOR_RED
+            MENUITEM "초록색",                         ID_FCOLOR_GREEN
+            MENUITEM "파란색",                         ID_FCOLOR_BLUE
+            MENUITEM "검정색",                         ID_32826
+        END
+        POPUP "글자크기"
+        BEGIN
+            MENUITEM "30pt",                        ID_FONTSIZE30
+            MENUITEM "50pt",                        ID_FONTSIZE50
+            MENUITEM "100pt",                       ID_FONTSIZE100
+        END
+        POPUP "글꼴속성"
+        BEGIN
+            MENUITEM "밑줄",                          ID_UNDERLINE
+            MENUITEM "기울기",                         ID_ITALIC
+        END
     END
 END
 
