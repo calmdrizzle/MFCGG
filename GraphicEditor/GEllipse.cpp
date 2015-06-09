@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "GraphicEditor.h"
 #include "GEllipse.h"
-
+#include "Object.h"
 IMPLEMENT_SERIAL(GEllipse, Object, 0)
 // GEllipse
 

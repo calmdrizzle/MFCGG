@@ -29,26 +29,30 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
-	ON_UPDATE_COMMAND_UI(ID_LINE, &CGraphicEditorView::OnUpdateLine)
-	ON_COMMAND(ID_LINE, &CGraphicEditorView::OnLine)
-	ON_UPDATE_COMMAND_UI(ID_ELLIPSE, &CGraphicEditorView::OnUpdateEllipse)
-	ON_COMMAND(ID_ELLIPSE, &CGraphicEditorView::OnEllipse)
-	ON_UPDATE_COMMAND_UI(ID_RECTANGLE, &CGraphicEditorView::OnUpdateRectangle)
-	ON_COMMAND(ID_RECTANGLE, &CGraphicEditorView::OnRectangle)
+	//ON_UPDATE_COMMAND_UI(ID_LINE, &CGraphicEditorView::OnUpdateLine)
+	//ON_COMMAND(ID_LINE, &CGraphicEditorView::OnLine)
+	//ON_UPDATE_COMMAND_UI(ID_ELLIPSE, &CGraphicEditorView::OnUpdateEllipse)
+	//ON_COMMAND(ID_ELLIPSE, &CGraphicEditorView::OnEllipse)
+	//ON_UPDATE_COMMAND_UI(ID_RECTANGLE, &CGraphicEditorView::OnUpdateRectangle)
+	//ON_COMMAND(ID_RECTANGLE, &CGraphicEditorView::OnRectangle)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
-	ON_UPDATE_COMMAND_UI(ID_POLYLINE, &CGraphicEditorView::OnUpdatePolyline)
-	ON_COMMAND(ID_POLYLINE, &CGraphicEditorView::OnPolyline)
+	//ON_UPDATE_COMMAND_UI(ID_POLYLINE, &CGraphicEditorView::OnUpdatePolyline)
+	//ON_COMMAND(ID_POLYLINE, &CGraphicEditorView::OnPolyline)
 	ON_WM_LBUTTONDBLCLK()
-	ON_COMMAND(ID_RED, &CGraphicEditorView::OnRed)
+	/*ON_COMMAND(ID_RED, &CGraphicEditorView::OnRed)
 	ON_COMMAND(ID_BLUE, &CGraphicEditorView::OnBlue)
 	ON_COMMAND(ID_GREEN, &CGraphicEditorView::OnGreen)
 	ON_COMMAND(ID_BLACK, &CGraphicEditorView::OnBlack)
 	ON_COMMAND(ID_white, &CGraphicEditorView::Onwhite)
 	ON_COMMAND(ID_ONE, &CGraphicEditorView::OnOne)
 	ON_COMMAND(ID_FIVE, &CGraphicEditorView::OnFive)
-	ON_COMMAND(ID_TEN, &CGraphicEditorView::OnTen)
+	ON_COMMAND(ID_TEN, &CGraphicEditorView::OnTen)*/
+	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CScrollView::OnFilePrintPreview)
+
 END_MESSAGE_MAP()
 
 // CGraphicEditorView 생성/소멸
@@ -56,8 +60,16 @@ END_MESSAGE_MAP()
 CGraphicEditorView::CGraphicEditorView()
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
-	m_drawMode = 1;
-	m_selected = FALSE;
+	_bDrawMode = FALSE;
+	_bDoing = FALSE;
+	_nZoomRate = 100;
+	_memDc = NULL;
+	_bitmap = NULL;
+	_oldRadius = 0;
+
+	_rect.left = _rect.top = 0;
+	_rect.bottom = 600;
+	_rect.right = 800;
 
 }
 
@@ -69,6 +81,15 @@ BOOL CGraphicEditorView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
+	cs.x = _rect.top;
+	cs.y = _rect.left;
+	cs.cx = _rect.bottom;
+	cs.cy = _rect.right;
+
+	cs.dwExStyle |= WS_EX_CLIENTEDGE;
+	cs.style &= ~WS_BORDER;
+	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
+		::LoadCursor(NULL, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1), NULL);
 
 	return CView::PreCreateWindow(cs);
 }
@@ -133,71 +154,42 @@ CGraphicEditorDoc* CGraphicEditorView::GetDocument() const // 디버그되지 않은 버
 
 void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	
-	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
-
-	//CMainFrame *ppMainFrame = (CMainFrame *)AfxGetMainWnd();
-
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
 	CClientDC dc(this);
 	 //그리기 시작
+	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
+	_bDrawMode = TRUE;
+	
+	CClientDC dc(this);
 
-	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
-	if (m_Draw == TRUE){
-		
-		
+	//다각형 그리는 중..
+	/*if (doc->CurDrawType == POLYGON && _bDoing) {
+		CPen cpen(PS_SOLID, ToolValues::LineWidth, ToolValues::FgColor);
+		CPen *oldPen = dc.SelectObject(&cpen);
 
+		dc.MoveTo(_drawTo);
+		dc.LineTo(point);
+		_oldPoint = point;
+
+		dc.SelectObject(oldPen);
+		return;
+	}*/
+
+	SetCapture();
+	
+	if (_bDrawMode == TRUE){
+		
 		switch (psDoc->m_CurrentType)
 		{
 		case SELECT:
 			break;
 
 		case LINE:
-			psDoc->GetLine(TRUE)->SetStartPoint(point);//라인 새로 생성
-			//psDoc->GetLine(TRUE);
-			//m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
-			//psDoc->GetLine()->setLine(ToolValues::LineWidth, ToolValues::FgColor);
+			psDoc->getBeeLineDraw(TRUE);
+			psDoc->getBeeLineDraw()->setBeeLine(Object::LineWidth, Object::FgColor);
 			break;
-		case POLYLINE:
-			psDoc->GetPolyLine(TRUE)->AddOnePt(point);//새로 생성
 			break;
 
-		case ELLIPSE:
-	{
-		GEllipse* g = new GEllipse();
-
-		g->SetThickness(m_FigureThickness);
-		g->SetStartPoint(point);
-		g->SetEndPoint(point);
-
-		g->SetPenStyle(m_LinepatternIndex);
-		g->SetFigureLineColor(m_FigureLineColor);
-		g->SetFillColor(m_FillColor);
-
-
-		psDoc->m_sCurrObject = g;
-		psDoc->m_sGObjectList.AddTail((Object*)g);
-			break;
-	}
-		case RECTANGLE:
-		psDoc->GetGRectangle(TRUE)->CPointToPoint(point);
-		//psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
-			break;
-
-		case TEXT:
-			psDoc->getTextDraw(TRUE)->setPosition(point);
-			psDoc->getTextDraw()->setColor(Object::FgColor, Object::BgColor);
-			psDoc->getTextDraw()->setFontName(Object::FontName);
-			psDoc->getTextDraw()->setFontMode(Object::FontMode);
-			psDoc->getTextDraw()->setFontSize(Object::FontSize);
-
-			TEXTMETRIC txtKey;
-			dc.GetTextMetrics(&txtKey);
-			CreateSolidCaret(1, txtKey.tmHeight);
-			SetCaretPos(point);
-			ShowCaret();
-
-			break;
 		}
 	}
 
@@ -222,7 +214,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	int oldMode;
 	//int radius;
 	
-	if (m_Draw == TRUE)
+	if (_bDrawMode == TRUE)
 	{
 
 		switch (psDoc->m_CurrentType)
@@ -234,22 +226,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			dc.LineTo(_oldPoint);
 			dc.SetROP2(oldMode);
 			break;
-		case POLYLINE:
-			if (m_DrawPoly == TRUE)
-			{
-				m_DBClick = FALSE;
-				m_CurrPoint = point;
-				
-			}
-			break;
-		case RECTANGLE:
-			oldMode = dc.SetROP2(R2_NOT);
-			dc.SelectStockObject(NULL_BRUSH);
-			dc.Rectangle(_oldPoint.x, _oldPoint.y, _anchor.x, _anchor.y);
-			dc.Rectangle(_anchor.x, _anchor.y, point.x, point.y);
-			_oldPoint = point;
-			dc.SetROP2(oldMode);
-			break;
+		
 	}
 		//Invalidate();
 }
@@ -259,15 +236,18 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
-	
-	//TRACE("FOCUS: %d\n", m_bsMakeFocusRect);
+
 	TRACE("OnButtonUp : %d\n", nFlags);
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 얻어오기
-	if (m_Draw == TRUE)
+	CString str;
+	str.Format(_T("마우스 좌표 (%4d, %4d)"), point.x, point.y);
+	CMainFrame *pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	//pMainFrame->m_wndStatusBar.SetPaneText(2, str);
+
+	if (_bDrawMode == TRUE)
 	{
-		if (psDoc->m_CurrentType == POLYLINE && m_Draw == TRUE) {
+		/*if (psDoc->m_CurrentType == POLYLINE && m_Draw == TRUE) {
 			CClientDC dc(this);
 			CPoint dump;
 			CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
@@ -284,28 +264,59 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 
 			m_Draw = TRUE;
 			return;
-		}
-		
+		}*/
+		int oldMode;
+		int radius;
+
+		CGraphicEditorDoc* psDoc = GetDocument();
+		CClientDC dc(this);
+
+		CPen cpen(PS_SOLID, Object::LineWidth, Object::FgColor);
+		CBrush cbrush(Object::BgColor);
+		CPen *oldPen = dc.SelectObject(&cpen);
+		CBrush *oldBrush = dc.SelectObject(&cbrush);
+
 		//CRect selectRect = MakeSelectRect();
 		switch (psDoc->m_CurrentType)
 		{
 		case LINE:
-			//psDoc->GetLine()->setPoint(_anchor, point);
-			m_ptEnd = point;
-			dc.MoveTo(m_ptStart);
-			dc.LineTo(m_ptEnd);
-			break;
-		case RECTANGLE:
-			psDoc->GetGRectangle()->setRect(_anchor, point);
-			
-			break;
+			oldMode = dc.SetROP2(R2_NOT);
 
+			dc.MoveTo(_anchor);
+			dc.LineTo(_oldPoint);
+
+			dc.MoveTo(_anchor);
+			dc.LineTo(point);
+			_oldPoint = point;
+
+			dc.SetROP2(oldMode);
+			break;
 		}
 		Invalidate(FALSE);
 	}
 	CView::OnLButtonUp(nFlags, point);
 }
 
+void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	TRACE("OnButtonDblClk : %d\n", nFlags);
+	_bDrawMode = FALSE;
+	CGraphicEditorDoc* psDoc = GetDocument();
+	ASSERT_VALID(psDoc);
+
+	/*
+	if ((psDoc->CurDrawType == POLYLINE) && _bDoing) {
+		psDoc->getPolygonDraw()->addPoint(point);
+
+		_bDoing = FALSE;
+		Invalidate(FALSE);
+	}*/
+	::ReleaseCapture();
+	CView::OnLButtonDblClk(nFlags, point);
+
+
+}
+/*
 void CGraphicEditorView::OnUpdateEllipse(CCmdUI *pCmdUI)
 {
 	BOOL bsEnable = GetDocument()->m_CurrentType == ELLIPSE;
@@ -392,27 +403,12 @@ void CGraphicEditorView::OnPolyline()
 		//doc->m_sSelectedList.RemoveAll();
 	}
 }
+*/
 
 
 
-void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	//m_Draw = FALSE;
-	CGraphicEditorDoc* psDoc = GetDocument();
-	ASSERT_VALID(psDoc);
 
-
-	if (m_Draw == TRUE && m_DrawPoly == TRUE) {
-		m_DrawPoly = FALSE; //폴리라인 그리기 종료
-		m_Draw = FALSE; //그리기 모드 종료
-		m_DBClick = TRUE; //더블 클릭 했음을 표시
-		CView::OnLButtonDblClk(nFlags, point);
-	}
-	
-}
-
-
+/*
 void CGraphicEditorView::OnRed()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -523,3 +519,4 @@ void CGraphicEditorView::OnTen()
 	dc.LineTo(m_ptEnd);
 	dc.SelectObject(oldPen);
 }
+*/
