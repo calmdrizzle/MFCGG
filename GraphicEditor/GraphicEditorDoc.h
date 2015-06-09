@@ -5,62 +5,56 @@
 
 #pragma once
 #include "Object.h"
-#include "GEllipse.h"
+#include "MainFrm.h"
 #include "Line.h"
-#include "Text.h"
-//#include "GRectangle.h"
+//#include "GPLine.h"
+#include "GEllipse.h"
+#include "GRectangle.h"
+//#include "GText.h"
 
 
 class CGraphicEditorDoc : public CDocument
 {
-private:
-	CPtrList m_DrawObjs;
-	Object* m_Cur;
-
 protected: // serialization에서만 만들어집니다.
 	CGraphicEditorDoc();
 	DECLARE_DYNCREATE(CGraphicEditorDoc)
 
-// 특성입니다.
+	// 특성입니다.
 public:
-	Line* GetLine(bool bIsNew = FALSE);
-	Text* GetText(bool bIsNew = FALSE);
-	
-	//GRectangle* GetGRectangle(BOOL bIsNew = FALSE);
-	GraphicObjectType CurDrawType;	//현재 선택된 그리기 모드
+	bool gobj_context_menu_enabled;
+	Object* cur_gobj;
+	CPtrList gobj_list;
+	GObj_Type cur_type;
+	CPoint point;
+	CPtrList temp_list;
 
+	int cur_thickness;
+	COLORREF cur_color;
+	COLORREF cur_fullcolor;
+	int cur_linepattern;
+	int cur_fullpattern;
+
+	// text
+	bool bItalic, bUnderline;
+	int size;
+	CString fontName;
+	COLORREF text_color;
+
+
+	CPtrList gobj_selected_list;
+	// 작업입니다.
+public:
+
+	// 재정의입니다.
+public:
 	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);   // 문서 입/출력을 위해 재정의되었습니다.
-
-	CPtrList& getDrawObjects();
-
-	//FillDraw* getFillDraw(bool bNew = FALSE);
-	//PencilDraw* getPencilDraw(bool bNew = FALSE);
-	GEllipse* GetEllipse(bool bNew = FALSE);
-
-// 작업입니다.
-public:
-	GraphicObjectType m_CurrentType;	//현재 그리기 타입
-	CPoint m_ClickedPoint;				//현재 클릭한 포인트
-	Object* m_CurrObject;				//
-	GraphicObjectType m_CurrType;		//
-	Object* m_sCurrObject;				//현재 그리는 그래피컬 개체
-	
-	
-	CTypedPtrList<CObList, Object*> m_sGObjectList;	//그리기 저장 리스트
-
-
-
-
-// 재정의입니다.
-public:
-
+	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS
 	virtual void InitializeSearchContent();
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
 #endif // SHARED_HANDLERS
 
-// 구현입니다.
+	// 구현입니다.
 public:
 	virtual ~CGraphicEditorDoc();
 #ifdef _DEBUG
@@ -70,7 +64,7 @@ public:
 
 protected:
 
-// 생성된 메시지 맵 함수
+	// 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
 
@@ -78,4 +72,37 @@ protected:
 	// 검색 처리기에 대한 검색 콘텐츠를 설정하는 도우미 함수
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+	afx_msg void OnSelect();
+	afx_msg void OnPolyline();
+	afx_msg void OnLine();
+	afx_msg void OnColorBlue();
+	afx_msg void OnThickness10();
+	afx_msg void OnColorGreen();
+	afx_msg void OnColorRed();
+	afx_msg void OnThickness1();
+	afx_msg void OnThickness5();
+	afx_msg void OnLinepattern1();
+	afx_msg void OnLinepattern2();
+	afx_msg void OnLinepattern3();
+	afx_msg void OnRectangle();
+	afx_msg void OnIncolorRed();
+	afx_msg void OnIncolorGreen();
+	afx_msg void OnIncolorBlue();
+	afx_msg void OnEllipse();
+	afx_msg void OnText();
+	afx_msg void OnInpattern1();
+	afx_msg void OnInpattern2();
+	afx_msg void OnInpattern3();
+	afx_msg void OnFcolorRed();
+	afx_msg void OnFcolorGreen();
+	afx_msg void OnFcolorBlue();
+	afx_msg void OnFont1();
+	afx_msg void OnFont2();
+	afx_msg void OnFont3();
+	afx_msg void OnFontsize30();
+	afx_msg void OnFontsize50();
+	afx_msg void OnFontsize100();
+	afx_msg void OnItalic();
+	afx_msg void OnUnderline();
 };
