@@ -8,7 +8,7 @@
 #include "GPLine.h"
 #include "GRectangle.h"
 #include "GEllipse.h"
-//#include "GText.h"
+#include "Text.h"
 
 class CGraphicEditorView : public CView
 {

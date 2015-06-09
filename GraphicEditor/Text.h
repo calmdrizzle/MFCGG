@@ -7,30 +7,42 @@ class Text : public Object
 {
 public:
 	Text();
-	virtual ~Text();
+	~Text();
+	void virtual draw(CDC*);
+	void virtual set(int left, int top, int right, int bottom);
+	void virtual move(int dx, int dy);
+
+	bool virtual isin(CPoint p);
+
+	CRect virtual getBoundary();
+
+	void setSize(int n) { size = n; }
+	int getSize() { return size; }
+
+	void setFont(CString f) { fontName = f; }
+	CString getFontName(){ return fontName; }
+
+	void setItalic(bool s) { bItalic = s; }
+	bool getItalic() { return bItalic; }
+
+	void setUnderline(bool s) { bUnderline = s; }
+	bool getUnderline() { return bUnderline; }
+
+	void setChar(char a) { nChar = a; }
+
+	bool beenIn(CRect rect){ if (rect.PtInRect(point) && rect.PtInRect(point_end))return true; else return false; }
+
+	CPoint getPoint_end(){ return point_end; }
+	void virtual drawBoundary(CDC*);
+
+	void virtual serialize(CArchive& ar, bool serialize_flag);
+
 private:
-	CString m_str;
-	CPoint m_position;
-	COLORREF m_fgColor, m_bgColor;
-	int m_fontSize;
-	CString m_fontName;
-	int m_fontMode;
+	CString fontName;
+	CArray <char, char> str;
+	bool bItalic, bUnderline;
+	int size;
+	char nChar;
 
-public:
-	void draw(CDC* pDc);
-	int drawType(void);
-	void serialize(CArchive& ar);
-	void deserialize(CArchive& ar);
 
-	void insertChar(UINT& nChar);
-	void subtractChar(void);
-	void setPosition(CPoint& point);
-	CPoint& getPosition();
-	CString& getString();
-	void setColor(COLORREF& fgColor, COLORREF& bgColor);
-	void setFontSize(int& fontSize);
-	void setFontName(CString& fontName);
-	void setFontMode(int& fontMode);
 };
-
-

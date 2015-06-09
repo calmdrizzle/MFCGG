@@ -133,7 +133,7 @@ void CGraphicEditorDoc::Serialize(CArchive& ar)
 		// TODO: 여기에 저장 코드를 추가합니다.
 	}
 	else
-	{/*
+	{
 	 // TODO: 여기에 로딩 코드를 추가합니다.
 	 int t; int count;
 	 //object_list.Serialize(ar);
@@ -145,7 +145,7 @@ void CGraphicEditorDoc::Serialize(CArchive& ar)
 	 ar >> t;
 	 switch (t){
 	 case TEXT:{
-	 GText* temp = new GText();
+	 Text* temp = new Text();
 	 gobj_list.AddTail((void*)temp);
 	 temp->serialize(ar, false);
 	 cur_gobj = temp;
@@ -157,13 +157,13 @@ void CGraphicEditorDoc::Serialize(CArchive& ar)
 	 cur_gobj = temp;
 	 break; }
 	 case RECTANGLE:{
-	 GRect* temp = new GRect();
+		 GRectangle* temp = new GRectangle();
 	 gobj_list.AddTail((void*)temp);
 	 temp->serialize(ar, false);
 	 cur_gobj = temp;
 	 break; }
 	 case LINE:{
-	 GLine* temp = new GLine();
+	 Line* temp = new Line();
 	 gobj_list.AddTail((void*)temp);
 	 temp->serialize(ar, false);
 	 cur_gobj = temp;
@@ -175,7 +175,7 @@ void CGraphicEditorDoc::Serialize(CArchive& ar)
 	 cur_gobj = temp;
 	 break; }
 	 }
-	 }*/
+	 }
 	}
 }
 

@@ -120,11 +120,11 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
 
 	switch (doc->cur_type){
-		/*case TEXT:
+		case TEXT:
 		{
 		isdrawing = true;
 
-		GText* g = new GText();
+		Text* g = new Text();
 		g->set(point.x, point.y, point.x, point.y);
 		g->setColor(doc->text_color);
 		g->setFont(doc->fontName);
@@ -135,7 +135,7 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		doc->cur_gobj = g;
 		doc->gobj_list.AddTail((void*)g);
 		break;
-		}*/
+		}
 	case ELLIPSE:
 	{
 		isdrawing = true;
@@ -401,7 +401,7 @@ void CGraphicEditorView::OnMouseMove(UINT nFlags, CPoint point)
 }
 
 
-/*void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
+void CGraphicEditorView::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 // TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 CGraphicEditorDoc* doc = (CGraphicEditorDoc*)GetDocument();
@@ -415,7 +415,7 @@ g->complete();
 doc->cur_gobj = NULL;
 
 CView::OnLButtonDblClk(nFlags, point);
-}*/
+}
 
 
 void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -431,7 +431,7 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	else if (nChar == VK_DELETE)
 	{
-		/*if (doc->cur_type == SELECT)
+		if (doc->cur_type == SELECT)
 		{
 		POSITION pos = doc->gobj_selected_list.GetHeadPosition();
 
@@ -462,7 +462,7 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 		doc->gobj_selected_list.RemoveAll();
 		}
-		}*/
+		}
 	}
 
 	if (nChar == 'C'){
@@ -516,12 +516,12 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				doc->temp_list.SetAt(p, (void*)g);
 				break;
 			}
-			/*case TEXT:
+			case TEXT:
 			{
-			GText* txt = (GText*)temp;
+			Text* txt = (Text*)temp;
 
 			doc->gobj_selected_list.RemoveAll();
-			GText* g = new GText();
+			Text* g = new Text();
 			g->set(temp->getPoint().x, temp->getPoint().y, temp->getPoint_end().x, temp->getPoint_end().y);
 			g->setColor(temp->getColor());
 			g->setFont(txt->getFontName());
@@ -532,7 +532,7 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			POSITION p = doc->temp_list.Find(temp);
 			doc->temp_list.SetAt(p, (void*)g);
 			break;
-			}*/
+			}
 			}
 		}
 	}
@@ -608,12 +608,12 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				doc->cur_gobj = NULL;
 				break;
 			}
-			/*case TEXT:
+			case TEXT:
 			{
-			GText* txt = (GText*)temp;
+			Text* txt = (Text*)temp;
 
 			doc->gobj_selected_list.RemoveAll();
-			GText* g = new GText();
+			Text* g = new Text();
 			g->set(temp->getPoint().x, temp->getPoint().y, temp->getPoint_end().x, temp->getPoint_end().y);
 			g->setColor(temp->getColor());
 			g->setFont(txt->getFontName());
@@ -628,7 +628,7 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			doc->gobj_list.RemoveAt(p);
 			doc->cur_gobj = NULL;
 			break;
-			}*/
+			}
 			}
 		}
 	}
@@ -664,13 +664,13 @@ void CGraphicEditorView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 
-	/*if (doc->cur_type == TEXT || found){
-	GText *g = (GText*)doc->cur_gobj;
+	if (doc->cur_type == TEXT || found){
+	Text *g = (Text*)doc->cur_gobj;
 	g->setChar(nChar);
 	g->draw(&dc);
 	Invalidate();
 	g->setChar(NULL);
-	}*/
+	}
 
 	CView::OnChar(nChar, nRepCnt, nFlags);
 }

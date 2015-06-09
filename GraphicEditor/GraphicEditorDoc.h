@@ -10,7 +10,7 @@
 #include "GPLine.h"
 #include "GEllipse.h"
 #include "GRectangle.h"
-//#include "GText.h"
+#include "Text.h"
 
 
 class CGraphicEditorDoc : public CDocument
