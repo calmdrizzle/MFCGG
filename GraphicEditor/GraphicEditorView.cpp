@@ -417,7 +417,7 @@ void CGraphicEditorView::OnBlue()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	CClientDC dc(this);
 	CPen pen;
-	m_color = RGB(0, 255, 0);
+	m_color = RGB(0, 0, 255);
 	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
 	CPen* oldPen = dc.SelectObject(&pen);
 	dc.MoveTo(m_ptStart);
@@ -431,7 +431,7 @@ void CGraphicEditorView::OnGreen()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	CClientDC dc(this);
 	CPen pen;
-	m_color = RGB(0, 0, 255);
+	m_color = RGB(0, 255, 0);
 	pen.CreatePen(PS_SOLID, m_LineThickness, m_color);    // 빨간색 펜 생성
 	CPen* oldPen = dc.SelectObject(&pen);
 	dc.MoveTo(m_ptStart);
