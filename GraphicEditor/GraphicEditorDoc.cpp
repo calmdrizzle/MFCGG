@@ -44,6 +44,13 @@ BOOL CGraphicEditorDoc::OnNewDocument()
 
 	// TODO: 여기에 재초기화 코드를 추가합니다.
 	// SDI 문서는 이 문서를 다시 사용합니다.
+	Object* obj;
+	POSITION pos = m_DrawObjs.GetHeadPosition();
+	while (pos != NULL) {
+		obj = (Object*)m_DrawObjs.GetNext(pos);
+		delete obj;
+	}
+	m_DrawObjs.RemoveAll();
 
 	return TRUE;
 }
@@ -55,13 +62,34 @@ BOOL CGraphicEditorDoc::OnNewDocument()
 
 void CGraphicEditorDoc::Serialize(CArchive& ar)
 {
-	if (ar.IsStoring())
-	{
-		// TODO: 여기에 저장 코드를 추가합니다.
-	}
-	else
-	{
-		// TODO: 여기에 로딩 코드를 추가합니다.
+	if (ar.IsStoring()) {		//저장
+		POSITION pos = m_DrawObjs.GetHeadPosition();
+		while (pos != NULL) {
+			((Object*)m_DrawObjs.GetNext(pos))->serialize(ar);
+		}
+
+	} else {	//로드
+		int toolType;
+		Object *obj;
+
+		do {
+			ar >> toolType;
+
+			switch (toolType) {
+			case LINE:
+				obj = new Line(); break;
+			case ELLIPSE:
+				obj = new GEllipse(); break;
+			case RECTANGLE:
+				obj = new GRectangle(); break;
+			}
+
+			obj->deserialize(ar);
+			m_DrawObjs.AddTail(obj);
+
+		} while (!ar.IsBufferEmpty());
+
+		((CFrameWnd*)AfxGetMainWnd())->GetActiveView()->Invalidate(TRUE);
 	}
 }
 

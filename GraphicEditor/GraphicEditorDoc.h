@@ -14,7 +14,6 @@
 class CGraphicEditorDoc : public CDocument
 {
 private:
-
 	CPtrList m_DrawObjs;
 	Object* m_Cur;
 
@@ -27,6 +26,18 @@ public:
 	Line* GetLine(BOOL bIsNew = FALSE);
 	GRectangle* GetGRectangle(BOOL bIsNew = FALSE);
 	PolyLine* GetPolyLine(BOOL bIsNew = FALSE);
+	GraphicObjectType CurDrawType;	//현재 선택된 그리기 모드
+
+	virtual BOOL OnNewDocument();
+	virtual void Serialize(CArchive& ar);   // 문서 입/출력을 위해 재정의되었습니다.
+
+	CPtrList& getDrawObjects();
+
+	Line* getBeeLineDraw(bool bNew = FALSE);
+	//FillDraw* getFillDraw(bool bNew = FALSE);
+	//PencilDraw* getPencilDraw(bool bNew = FALSE);
+	GEllipse* getEllipseDraw(bool bNew = FALSE);
+	GRectangle* getRactangleDraw(bool bNew = FALSE);
 
 // 작업입니다.
 public:
