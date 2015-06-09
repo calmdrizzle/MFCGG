@@ -5,38 +5,23 @@
 #include "GraphicEditor.h"
 #include "Line.h"
 
-IMPLEMENT_SERIAL(Line, Object, 0)
-
 // Line 생성자
 
 Line::Line()
 {
-	Object::m_Type = LINE;
 }
-
-Line::Line(const Line& ponitL)//복사 생성자
-{
-	this->Object::m_Type = ponitL.Object::m_Type;
-	this->Object::m_LineColor = ponitL.Object::m_LineColor;
-	this->Object::m_StartPoint = ponitL.Object::m_StartPoint;
-	this->Object::m_EndPoint = ponitL.Object::m_EndPoint;
-	this->Object::m_Thickness = ponitL.Object::m_Thickness;
-}
-
 Line::~Line()
 {
 }
 
+void Line::draw(CDC* pDc) {
+	CPen pen(PS_SOLID, m_lineThickness, m_color);
+	CPen* oldPen = pDc->SelectObject(&pen);
 
-void Line::Draw(CDC* pDC)
-{
-	CPen pen(PS_SOLID, m_Thickness, m_color);
-	CPen* oldPen = pDC->SelectObject(&pen);
+	pDc->MoveTo(m_start);
+	pDc->LineTo(m_end);
 
-	pDC->MoveTo(m_start);
-	pDC->LineTo(m_end);
-
-	pDC->SelectObject(oldPen);
+	pDc->SelectObject(oldPen);
 }
 
 int Line::drawType(void) {
@@ -48,18 +33,16 @@ void Line::setPoint(CPoint& start, CPoint& end)
 	m_end = end;
 }
 
-void Line::setLine(int& lineThickness, COLORREF& color) {
-	m_Thickness = lineThickness;
+void Line::setBeeLine(int& lineThickness, COLORREF& color) {
+	m_lineThickness = lineThickness;
 	m_color = color;
 }
 
 void Line::serialize(CArchive& ar) {
 	ar << drawType();
-	ar << m_start << m_end << m_Thickness << m_color;
+	ar << m_start << m_end << m_lineThickness << m_color;
 }
 
 void Line::deserialize(CArchive& ar) {
-	ar >> m_start >> m_end >> m_Thickness >> m_color;
+	ar >> m_start >> m_end >> m_lineThickness >> m_color;
 }
-
-// Line 멤버 함수
