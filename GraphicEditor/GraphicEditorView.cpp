@@ -124,13 +124,14 @@ CGraphicEditorDoc* CGraphicEditorView::GetDocument() const // 디버그되지 않은 버
 
 void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	CClientDC dc(this);
+	
 	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
+	m_Draw = TRUE; //그리기 시작
+	//CMainFrame *ppMainFrame = (CMainFrame *)AfxGetMainWnd();
 
-	CMainFrame *ppMainFrame = (CMainFrame *)AfxGetMainWnd();
 	CGraphicEditorDoc* psDoc = GetDocument(); //도큐먼트 받음
 
-	m_Draw = TRUE; //그리기 시작
+	CClientDC dc(this);
 
 	m_ptStart = point;//마우스 포인터가 클릭하는 곳으로 그리기 시작
 
@@ -150,15 +151,29 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		break;
 
 	case ELLIPSE:
+	{
+		GEllipse* g = new GEllipse();
+
+		g->SetThickness(m_FigureThickness);
+		g->SetStartPoint(point);
+		g->SetEndPoint(point);
+
+		g->SetPenStyle(m_LinepatternIndex);
+		g->SetFigureLineColor(m_FigureLineColor);
+		g->SetFillColor(m_FillColor);
+
+
+		psDoc->m_sCurrObject = g;
+		psDoc->m_sGObjectList.AddTail((Object*)g);
 		break;
-	
+	}
 	case RECTANGLE:
-		psDoc->GetGRectangle(TRUE);
-		psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
+		psDoc->GetGRectangle(TRUE)->CPointToPoint(point);
+		//psDoc->GetGRectangle()->setProps(Object::LineWidth, Object::FgColor, Object::BgColor);
 		break;
 	}
 
-
+	_anchor = _drawTo = _oldPoint = point;
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -234,11 +249,12 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			dc.MoveTo(m_ptStart);
 			dc.LineTo(m_ptEnd);
 			break;
-			
+		case RECTANGLE:
 			psDoc->GetGRectangle()->setRect(_anchor, point);
+
 			break;
 		}
-		//Invalidate(FALSE);
+		Invalidate(FALSE);
 	}
 	CView::OnLButtonUp(nFlags, point);
 }
@@ -293,7 +309,8 @@ void CGraphicEditorView::OnLine()
 
 void CGraphicEditorView::OnEllipse()
 {
-	GetDocument()->m_CurrentType = ELLIPSE;
+	CGraphicEditorDoc* psDoc = GetDocument();
+	psDoc->m_CurrentType = ELLIPSE;
 	m_drawMode = 1;
 	m_selected = FALSE;
 	if (!m_selected){

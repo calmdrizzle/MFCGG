@@ -14,6 +14,7 @@
 class CGraphicEditorDoc : public CDocument
 {
 private:
+
 	CPtrList m_DrawObjs;
 	Object* m_Cur;
 
@@ -33,6 +34,10 @@ public:
 	CPoint m_ClickedPoint;				//현재 클릭한 포인트
 	Object* m_CurrObject;				//
 	GraphicObjectType m_CurrType;		//
+	Object* m_sCurrObject;				//현재 그리는 그래피컬 개체
+	
+	CTypedPtrList<CObList, Object*> m_sGObjectList;	//그리기 저장 리스트
+
 
 
 
