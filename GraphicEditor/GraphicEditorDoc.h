@@ -8,7 +8,6 @@
 #include "GEllipse.h"
 #include "Line.h"
 #include "GRectangle.h"
-#include "PolyLine.h"
 
 
 class CGraphicEditorDoc : public CDocument
@@ -25,7 +24,6 @@ protected: // serialization에서만 만들어집니다.
 public:
 	Line* GetLine(BOOL bIsNew = FALSE);
 	GRectangle* GetGRectangle(BOOL bIsNew = FALSE);
-	PolyLine* GetPolyLine(BOOL bIsNew = FALSE);
 	GraphicObjectType CurDrawType;	//현재 선택된 그리기 모드
 
 	virtual BOOL OnNewDocument();
@@ -33,11 +31,9 @@ public:
 
 	CPtrList& getDrawObjects();
 
-	Line* getBeeLineDraw(bool bNew = FALSE);
 	//FillDraw* getFillDraw(bool bNew = FALSE);
 	//PencilDraw* getPencilDraw(bool bNew = FALSE);
-	GEllipse* getEllipseDraw(bool bNew = FALSE);
-	GRectangle* getRactangleDraw(bool bNew = FALSE);
+	GEllipse* GetEllipse(bool bNew = FALSE);
 
 // 작업입니다.
 public:
@@ -54,8 +50,7 @@ public:
 
 // 재정의입니다.
 public:
-	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);
+
 #ifdef SHARED_HANDLERS
 	virtual void InitializeSearchContent();
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);

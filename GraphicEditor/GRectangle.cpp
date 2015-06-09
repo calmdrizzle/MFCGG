@@ -77,7 +77,7 @@ void GRectangle::setRect(CPoint& topLeft, CPoint& bottomRight)
 	m_bottomRight = bottomRight;
 }
 
-void GRectangle::setProps(int& lineWidth, COLORREF& lineColor, COLORREF& fillColor) {
+void GRectangle::setProps(FIGURETYPE type, int& lineWidth, COLORREF& lineColor, COLORREF& fillColor) {
 	m_type = type;
 	m_Thickness = lineWidth;
 	m_lineColor = lineColor;

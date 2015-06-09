@@ -23,7 +23,7 @@ public:
 	void deserialize(CArchive& ar);
 
 	void setRect(CPoint& topLeft, CPoint& bottomRight);
-	void setProps(int& lineWidth, COLORREF& lineColor, COLORREF& fillColor);
+	void setProps(FIGURETYPE type, int& lineWidth, COLORREF& lineColor, COLORREF& fillColor);
 };
 
 

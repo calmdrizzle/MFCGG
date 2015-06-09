@@ -49,9 +49,9 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_COMMAND(ID_ONE, &CGraphicEditorView::OnOne)
 	ON_COMMAND(ID_FIVE, &CGraphicEditorView::OnFive)
 	ON_COMMAND(ID_TEN, &CGraphicEditorView::OnTen)*/
-	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CScrollView::OnFilePrintPreview)
+//	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
+//	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
+//	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CScrollView::OnFilePrintPreview)
 
 END_MESSAGE_MAP()
 
@@ -160,8 +160,6 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	TRACE("OnButtonDown : %d [%d, %d]\n", nFlags, point.x, point.y);
 	_bDrawMode = TRUE;
 	
-	CClientDC dc(this);
-
 	//다각형 그리는 중..
 	/*if (doc->CurDrawType == POLYGON && _bDoing) {
 		CPen cpen(PS_SOLID, ToolValues::LineWidth, ToolValues::FgColor);
@@ -185,8 +183,8 @@ void CGraphicEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 			break;
 
 		case LINE:
-			psDoc->getBeeLineDraw(TRUE);
-			psDoc->getBeeLineDraw()->setBeeLine(Object::LineWidth, Object::FgColor);
+			psDoc->GetLine(TRUE);
+			psDoc->GetLine()->setBeeLine(Object::LineWidth, Object::FgColor);
 			break;
 			break;
 
@@ -266,7 +264,7 @@ void CGraphicEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			return;
 		}*/
 		int oldMode;
-		int radius;
+//		int radius;
 
 		CGraphicEditorDoc* psDoc = GetDocument();
 		CClientDC dc(this);
