@@ -160,7 +160,8 @@ BEGIN
             MENUITEM "빨간색",                         ID_COLOR_RED
             MENUITEM "초록색",                         ID_COLOR_GREEN
             MENUITEM "파란색",                         ID_COLOR_BLUE
-            MENUITEM "검은색",                         ID_COLOR_BLACK
+            MENUITEM "검은색",                         ID_COLOR_BLUE
+            MENUITEM "흰색",                          ID_COLOR_WHITE
         END
         POPUP "두께"
         BEGIN
@@ -180,6 +181,7 @@ BEGIN
             MENUITEM "초록색",                         ID_INCOLOR_GREEN
             MENUITEM "파란색",                         ID_INCOLOR_BLUE
             MENUITEM "검은색",                         ID_INCOLOR_BLACK
+            MENUITEM "흰색",                          ID_INCOLOR_WHITE
         END
         POPUP "내부모양"
         BEGIN

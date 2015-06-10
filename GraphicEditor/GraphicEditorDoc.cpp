@@ -56,6 +56,8 @@ BEGIN_MESSAGE_MAP(CGraphicEditorDoc, CDocument)
 	ON_COMMAND(ID_UNDERLINE, &CGraphicEditorDoc::OnUnderline)*/
 	ON_COMMAND(ID_COLOR_BLACK, &CGraphicEditorDoc::OnColorBlack)
 	ON_COMMAND(ID_INCOLOR_BLACK, &CGraphicEditorDoc::OnIncolorBlack)
+	ON_COMMAND(ID_COLOR_WHITE, &CGraphicEditorDoc::OnColorWhite)
+	ON_COMMAND(ID_INCOLOR_WHITE, &CGraphicEditorDoc::OnIncolorWhite)
 END_MESSAGE_MAP()
 
 
@@ -94,10 +96,10 @@ BOOL CGraphicEditorDoc::OnNewDocument()
 
 	cur_type = LINE;
 	cur_linepattern = PS_SOLID;
-	cur_color = RGB(255, 0, 0);
+	cur_color = RGB(0, 0, 0);
 	cur_thickness = 1;
 
-	cur_fullcolor = RGB(255, 0, 0);
+	cur_fullcolor = RGB(255, 255, 255);
 	cur_fullpattern = 6;
 
 	bItalic = false;
@@ -740,7 +742,7 @@ void CGraphicEditorDoc::OnInpattern3()
 	}
 }
 
-/*
+
 void CGraphicEditorDoc::OnFcolorRed()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -756,7 +758,7 @@ Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setColor(text_color);
 }
 
@@ -780,11 +782,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setColor(text_color);
 }
 
@@ -797,7 +799,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFcolorBlue()
+void CGraphicEditorDoc::OnFcolorBlue()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 text_color = RGB(0, 0, 255);
@@ -808,11 +810,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setColor(text_color);
 }
 
@@ -825,7 +827,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFont1()
+void CGraphicEditorDoc::OnFont1()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 fontName = "궁서";
@@ -836,11 +838,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setFont(fontName);
 }
 
@@ -853,7 +855,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFont2()
+void CGraphicEditorDoc::OnFont2()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 fontName = "굴림";
@@ -864,11 +866,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setFont(fontName);
 }
 
@@ -882,7 +884,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFont3()
+void CGraphicEditorDoc::OnFont3()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 fontName = "바탕";
@@ -893,11 +895,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setFont(fontName);
 }
 
@@ -910,7 +912,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFontsize30()
+void CGraphicEditorDoc::OnFontsize30()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 size = 30;
@@ -921,11 +923,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setSize(size);
 }
 
@@ -938,7 +940,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFontsize50()
+void CGraphicEditorDoc::OnFontsize50()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 size = 50;
@@ -949,11 +951,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setSize(size);
 }
 
@@ -965,7 +967,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnFontsize100()
+void CGraphicEditorDoc::OnFontsize100()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 size = 100;
@@ -976,11 +978,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setSize(size);
 }
 
@@ -992,7 +994,7 @@ p->Invalidate();
 }
 
 
-void CGEditorDoc::OnItalic()
+void CGraphicEditorDoc::OnItalic()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 bItalic = !bItalic;
@@ -1003,11 +1005,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setItalic(bItalic);
 }
 
@@ -1018,7 +1020,7 @@ p->Invalidate();
 }
 }
 
-void CGEditorDoc::OnUnderline()
+void CGraphicEditorDoc::OnUnderline()
 {
 // TODO: 여기에 명령 처리기 코드를 추가합니다.
 bUnderline = !bUnderline;
@@ -1029,11 +1031,11 @@ POSITION pos = gobj_selected_list.GetHeadPosition();
 
 while (pos != NULL)
 {
-GObj* gobj = (GObj*)gobj_selected_list.GetNext(pos);
+	Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
 
 if (gobj->type() == TEXT)
 {
-GText* g = (GText*)gobj;
+Text* g = (Text*)gobj;
 g->setUnderline(bUnderline);
 }
 
@@ -1043,7 +1045,7 @@ CMainFrame* p = (CMainFrame*)AfxGetMainWnd();
 p->Invalidate();
 }
 }
-*/
+
 
 void CGraphicEditorDoc::OnColorBlack()
 {
@@ -1070,6 +1072,59 @@ void CGraphicEditorDoc::OnIncolorBlack()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	cur_fullcolor = RGB(0, 0, 0);
+
+	if (gobj_context_menu_enabled == true)
+	{
+		POSITION pos = gobj_selected_list.GetHeadPosition();
+
+		while (pos != NULL)
+		{
+			Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
+
+			if (gobj->type() == RECTANGLE)
+			{
+				GRectangle* g = (GRectangle*)gobj;
+				g->setFull_color(cur_fullcolor);
+			}
+			else if (gobj->type() == ELLIPSE)
+			{
+				GEllipse *g = (GEllipse*)gobj;
+				g->setFull_color(cur_fullcolor);
+			}
+
+		}
+
+		CMainFrame* p = (CMainFrame*)AfxGetMainWnd();
+		p->Invalidate();
+	}
+}
+
+
+void CGraphicEditorDoc::OnColorWhite()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	cur_color = RGB(255, 255, 255);
+
+	if (gobj_context_menu_enabled == true)
+	{
+		POSITION pos = gobj_selected_list.GetHeadPosition();
+
+		while (pos != NULL)
+		{
+			Object* gobj = (Object*)gobj_selected_list.GetNext(pos);
+			gobj->setColor(cur_color);
+		}
+
+		CMainFrame* p = (CMainFrame*)AfxGetMainWnd();
+		p->Invalidate();
+	}
+}
+
+
+void CGraphicEditorDoc::OnIncolorWhite()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	cur_fullcolor = RGB(255, 255, 255);
 
 	if (gobj_context_menu_enabled == true)
 	{

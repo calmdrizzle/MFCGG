@@ -19,7 +19,7 @@ public:
 
 	void setFull_pattern(int n){ full_pattern = n; }
 	bool beenIn(CRect rect) { if (rect.PtInRect(point) && rect.PtInRect(point_end))return true; else return false; }
-
+	 
 	CPoint getPoint_end(){ return point_end; }
 	int getFull_pattern() { return full_pattern; }
 

@@ -167,7 +167,7 @@ bool Text::isin(CPoint p){
 
 
 
-void Text::draw(CDC* cdc)
+void Text::draw(CDC* pDC)
 {
 	CRect rect;
 	
@@ -179,13 +179,13 @@ void Text::draw(CDC* cdc)
 	CFont f;
 	f.CreateFont(size, 0, 0, 0, 0, bItalic, bUnderline, 0, 0, 0, 0, 0, 0, fontName);
 
-	cdc->SelectObject(&f);
+	pDC->SelectObject(&f);
 
-	cdc->SetTextColor(color);
+	pDC->SetTextColor(color);
 
 	CPen pen(PS_DOT, 1, RGB(200, 200, 200));
-	cdc->SelectObject(&pen);
-	cdc->SelectStockObject(NULL_BRUSH);
+	pDC->SelectObject(&pen);
+	pDC->SelectStockObject(NULL_BRUSH);
 
 	if (nChar != NULL){
 		if (nChar == '\b'){
@@ -197,9 +197,9 @@ void Text::draw(CDC* cdc)
 			str.Add(nChar);
 		}
 	}
-	//cdc->DrawText(str.GetData(), str.GetSize(), &rect, DT_CENTER | DT_VCENTER);
-
-	cdc->Rectangle(&rect);
+	//pDC->DrawText(str.GetData(), str.GetSize(), &rect, DT_CENTER | DT_VCENTER);
+	
+	pDC->Rectangle(&rect);
 }
 
 void Text::serialize(CArchive &ar, bool serialize_flag){

@@ -107,4 +107,6 @@ public:
 	afx_msg void OnUnderline();
 	afx_msg void OnColorBlack();
 	afx_msg void OnIncolorBlack();
+	afx_msg void OnColorWhite();
+	afx_msg void OnIncolorWhite();
 };

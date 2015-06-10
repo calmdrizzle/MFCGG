@@ -11,7 +11,7 @@
 Object::Object()
 {
 	thickness = 5;
-	color = RGB(0, 0, 255);
+	color = RGB(255, 255, 255);
 	selected = false;
 }
 
