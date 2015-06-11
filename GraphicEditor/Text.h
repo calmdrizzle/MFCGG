@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "stdafx.h"
 
 // Text 명령 대상입니다.
 
@@ -28,9 +29,15 @@ public:
 	void setUnderline(bool s) { bUnderline = s; }
 	bool getUnderline() { return bUnderline; }
 
-	void setChar(char a) { nChar = a; }
+	void setChar(TCHAR a) { nChar = a; }
 
-	bool beenIn(CRect rect){ if (rect.PtInRect(point) && rect.PtInRect(point_end))return true; else return false; }
+	bool beenIn(CRect rect)
+	{
+		if (rect.PtInRect(point) && rect.PtInRect(point_end))
+			return true;
+		else
+			return false;
+	}
 
 	CPoint getPoint_end(){ return point_end; }
 	void virtual drawBoundary(CDC*);
@@ -39,10 +46,9 @@ public:
 
 private:
 	CString fontName;
-	CArray <char, char> str;
+	CArray <TCHAR, TCHAR> str;
 	bool bItalic, bUnderline;
 	int size;
-	char nChar;
-
+	TCHAR nChar;
 
 };

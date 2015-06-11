@@ -8,6 +8,7 @@
 #include "GraphicEditorDoc.h"
 
 
+
 // Text
 
 Text::Text()
@@ -167,9 +168,10 @@ bool Text::isin(CPoint p){
 
 
 
-void Text::draw(CDC* pDC)
+void Text::draw(CDC* cdc)
 {
 	CRect rect;
+	
 	
 	rect.left = point.x;
 	rect.top = point.y;
@@ -179,13 +181,13 @@ void Text::draw(CDC* pDC)
 	CFont f;
 	f.CreateFont(size, 0, 0, 0, 0, bItalic, bUnderline, 0, 0, 0, 0, 0, 0, fontName);
 
-	pDC->SelectObject(&f);
+	cdc->SelectObject(&f);
 
-	pDC->SetTextColor(color);
+	cdc->SetTextColor(color);
 
 	CPen pen(PS_DOT, 1, RGB(200, 200, 200));
-	pDC->SelectObject(&pen);
-	pDC->SelectStockObject(NULL_BRUSH);
+	cdc->SelectObject(&pen);
+	cdc->SelectStockObject(NULL_BRUSH);
 
 	if (nChar != NULL){
 		if (nChar == '\b'){
@@ -197,9 +199,9 @@ void Text::draw(CDC* pDC)
 			str.Add(nChar);
 		}
 	}
-	//pDC->DrawText(str.GetData(), str.GetSize(), &rect, DT_CENTER | DT_VCENTER);
+	cdc->DrawText(str.GetData(), str.GetSize(), &rect, DT_CENTER | DT_VCENTER);
 	
-	pDC->Rectangle(&rect);
+	cdc->Rectangle(&rect);
 }
 
 void Text::serialize(CArchive &ar, bool serialize_flag){

@@ -27,7 +27,7 @@ BEGIN_MESSAGE_MAP(CGraphicEditorView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
-	//ON_WM_LBUTTONDBLCLK()
+	ON_WM_LBUTTONDBLCLK()
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
 	ON_WM_CHAR()
@@ -541,8 +541,8 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		while (pos){
 			Object* temp = (Object*)(doc->temp_list.GetNext(pos));
 			doc->gobj_list.AddTail((void*)temp);
-			//POSITION p = doc->temp_list.Find(temp);
-			//doc->temp_list.SetAt(p,(void*)temp);
+			POSITION p = doc->temp_list.Find(temp);
+			doc->temp_list.SetAt(p,(void*)temp);
 		}
 		doc->temp_list.RemoveAll();
 		Invalidate();
