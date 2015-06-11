@@ -482,6 +482,40 @@ void CGraphicEditorView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 			switch (temp->type())
 			{
+			case LINE:
+			{
+				Line* rec = (Line*)temp;
+
+				doc->gobj_selected_list.RemoveAll();
+				Line* g = new Line();
+				g->set(rec->getPoint().x, rec->getPoint().y, rec->getPoint_end().x, rec->getPoint_end().y);
+				g->setColor(rec->getColor());
+				//g->setFull_color(rec->getFull_color());
+				g->setThickness(rec->getThickness());
+				g->setLinePattern(rec->getLinePattern());
+				//g->setFull_pattern(rec->getFull_pattern());
+				g->move(1000, 1000);
+				POSITION p = doc->temp_list.Find(temp);
+				doc->temp_list.SetAt(p, (void*)g);
+				break;
+			}
+			case POLYLINE:
+			{
+				GPLine* rec = (GPLine*)temp;
+
+				doc->gobj_selected_list.RemoveAll();
+				GPLine* g = new GPLine();
+				g->set(rec->getPoint().x, rec->getPoint().y, rec->getPoint_end().x, rec->getPoint_end().y);
+				g->setColor(rec->getColor());
+				//g->setFull_color(rec->getFull_color());
+				g->setThickness(rec->getThickness());
+				g->setLinePattern(rec->getLinePattern());
+				//g->setFull_pattern(rec->getFull_pattern());
+				g->move(1000, 1000);
+				POSITION p = doc->temp_list.Find(temp);
+				doc->temp_list.SetAt(p, (void*)g);
+				break;
+			}
 			case RECTANGLE:
 			{
 				GRectangle* rec = (GRectangle*)temp;
